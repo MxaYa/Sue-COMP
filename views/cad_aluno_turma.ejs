@@ -13,7 +13,7 @@
         <label for="aluno">Aluno:</label>
         <select id="aluno" name="aluno" required>
             <% alunos.forEach(function(aluno) { %>
-            <option value="<%= aluno.aluno_id %>" data-id="<%= aluno.aluno_id %>">
+            <option value="<% aluno.aluno_id %>" data-id="<%= aluno.aluno_id %>">
                 <%= aluno.nome_aluno %>
             </option>
             <% }); %>
@@ -25,7 +25,7 @@
             <% turmas.forEach(function(turma) { %>
             <option
                 value="<%= turma.turma_id %>"
-                data-id="<%= turma.turma_id %>">
+                data-id="<% turma.turma_id %>">
                 <%= turma.turma_id %>
             </option>
             <% }); %>
@@ -48,7 +48,7 @@
             </tr>
         </thead>
         <tbody>
-            <% Ass_Aluno_turmas.forEach(function(Ass_aluno_turma) { %>
+            <%= Ass_aluno_turmas.forEach(function(Ass_aluno_turma) { %>
             <tr>
               <td><%= Ass_aluno_turma.aluno_id %></td>
               <td><%= Ass_aluno_turma.nome_aluno %></td>
@@ -60,7 +60,7 @@
                   </button>
 
                   <form
-                    action="/excluir_aluno_turma/<%= Ass_aluno_turma.aluno_id %>/ <%= Ass_aluno_turma.turma_id %>"
+                    action="/excluir_aluno_turma/<% Ass_aluno_turma.aluno_id %>/ <%= Ass_aluno_turma.turma_id %>"
                     method="POST"
                   >
                       <button type="submit">Excluir</button>
