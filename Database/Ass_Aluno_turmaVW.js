@@ -1,5 +1,5 @@
 const{DataTypes, Model } = require("sequelize");
-const sequelize = require("./database");
+const sequelize = require("./Database");
 
 
 class Ass_aluno_turmaVW extends Model {} 
