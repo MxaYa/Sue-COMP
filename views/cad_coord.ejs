@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Coordenador</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#birth-date').mask('00/00/0000');
+            $('#phone-number').mask('0000-0000');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <form action="/editar_coordenador" method="POST">
+                <div class="form-icon">
+                    <span>SUE</span>
+                </div>
+                <center><h3>Cadastro de Coordenador</h3></center>
+                
+                <div class="form-group">
+                    <label for="usuario">Escolha um usuário a ser cadastrado como Coordenador:</label>
+                    <select name="usuario" id="usuario" class="form-control">
+                        <option value="Gabriel Rocha">Gabriel Rocha</option>
+                        <option value="Fernando Oliveira">Fernando Oliveira</option>
+                        <option value="Maxsuell Oliveira">Maxue
+                            l Santos</option>
+                        <option value="Anderson">Anderson</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="unidade">Escolha a unidade que o Coordenador atuará:</label>
+                    <select name="unidade" id="unidade" class="form-control">
+                        <option value="SENAI CETIND">SENAI CETIND</option>
+                        <option value="SENAI CIMATEC">SENAI CIMATEC</option>
+                        <option value="SENAI DENDEZEIROS">SENAI DENDEZEIROS</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="senha">Crie uma Senha para o coordenador:</label>
+                    <input type="password" class="form-control item" id="senha" name="senha" placeholder="Senha" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmar_senha">Confirme a Senha:</label>
+                    <input type="password" class="form-control item" id="confirmar_senha" name="confirmar_senha" placeholder="Confirme a senha" required>
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block create-account">Salvar</button>
+                </div>
+                <input type="hidden" id="id_coordenador" name="id_coordenador" />
+            </form>
+        </div>
+
+        <h2>Relação de Coordenadores Cadastrados</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Usuário</th>
+                    <th>Unidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% coordenadores.forEach(function(coordenador) { %>
+                <tr>
+                    <td><%= coordenador.usuario %></td>
+                    <td><%= coordenador.unidade %></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="preencherFormulario('<%= coordenador.usuario %>', '<%= coordenador.unidade %>', '<%= coordenador.id_coordenador %>')">Editar</button>
+                        <form action="/excluir_coordenador/<%= coordenador.id_coordenador %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function preencherFormulario(usuario, unidade, id_coordenador) {
+            document.getElementById("usuario").value = usuario;
+            document.getElementById("unidade").value = unidade;
+            document.getElementById("id_coordenador").value = id_coordenador;
+        }
+    </script>
+</body>
+</html>

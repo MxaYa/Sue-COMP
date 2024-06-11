@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Disciplina</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#birth-date').mask('00/00/0000');
+            $('#phone-number').mask('0000-0000');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <form action="/editar_disciplina" method="POST">
+                <div class="form-icon">
+                    <span>SUE</span>
+                </div>
+                <center><h3>Cadastro de Disciplina</h3></center>
+                <div class="form-group">
+                    <label for="nome_disciplina">Nome da Disciplina:</label>
+                    <input type="text" class="form-control item" id="nome_disciplina" name="nome_disciplina" placeholder="Nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricao_disciplina">Descrição da Disciplina:</label>
+                    <input type="text" class="form-control item" id="descricao_disciplina" name="descricao_disciplina" placeholder="Descrição" required>
+                </div>
+                <div class="form-group">
+                    <label for="carga_horaria">Carga Horária:</label>
+                    <input type="text" class="form-control item" id="carga_horaria" name="carga_horaria" placeholder="Carga Horária" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block create-account" name="action" value="incluir">Salvar</button>
+                </div>
+                <input type="hidden" id="id_disciplina" name="id_disciplina" />
+            </form>
+        </div>
+
+        <h2>Relação de Disciplinas Cadastradas</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nome da Disciplina</th>
+                    <th>Descrição</th>
+                    <th>Carga Horária</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% disciplinas.forEach(function(disciplina) { %>
+                <tr>
+                    <td><%= disciplina.nome_disciplina %></td>
+                    <td><%= disciplina.descricao_disciplina %></td>
+                    <td><%= disciplina.carga_horaria %></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="preencherFormulario('<%= disciplina.nome_disciplina %>', '<%= disciplina.descricao_disciplina %>', '<%= disciplina.carga_horaria %>', '<%= disciplina.id_disciplina %>')">Editar</button>
+                        <form action="/excluir_disciplina/<%= disciplina.id_disciplina %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function preencherFormulario(nome_disciplina, descricao_disciplina, carga_horaria, id_disciplina) {
+            document.getElementById("nome_disciplina").value = nome_disciplina;
+            document.getElementById("descricao_disciplina").value = descricao_disciplina;
+            document.getElementById("carga_horaria").value = carga_horaria;
+            document.getElementById("id_disciplina").value = id_disciplina;
+        }
+    </script>
+</body>
+</html>

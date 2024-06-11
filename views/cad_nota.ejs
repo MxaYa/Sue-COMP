@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Notas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#birth-date').mask('00/00/0000');
+            $('#phone-number').mask('0000-0000');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <form action="/editar_nota" method="POST">
+                <div class="form-icon">
+                    <span>SUE</span>
+                </div>
+                <center><h3>Cadastro de Notas</h3></center>
+                <div class="form-group">
+                    <label for="descricao">Descrição da Nota:</label>
+                    <input type="text" class="form-control item" id="descricao" name="descricao" placeholder="Descrição da Nota" required>
+                </div>
+                <div class="form-group">
+                    <label for="valor">Valor da Nota:</label>
+                    <input type="number" class="form-control item" id="valor" name="valor" placeholder="Valor da Nota" required>
+                </div>
+                <div class="form-group">
+                    <label for="data_nota">Data da Nota:</label>
+                    <input type="date" class="form-control item" id="data_nota" name="data_nota" placeholder="Data da Nota" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block create-account">Salvar</button>
+                </div>
+                <input type="hidden" id="id_nota" name="id_nota" />
+            </form>
+        </div>
+
+        <h2>Relação de Notas Registradas</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% notas.forEach(function(nota) { %>
+                <tr>
+                    <td><%= nota.descricao %></td>
+                    <td><%= nota.valor %></td>
+                    <td><%= nota.data_nota %></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="preencherFormulario('<%= nota.descricao %>', '<%= nota.valor %>', '<%= nota.data_nota %>', '<%= nota.id_nota %>')">Editar</button>
+                        <form action="/excluir_nota/<%= nota.id_nota %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function preencherFormulario(descricao, valor, data_nota, id_nota) {
+            document.getElementById("descricao").value = descricao;
+            document.getElementById("valor").value = valor;
+            document.getElementById("data_nota").value = data_nota;
+            document.getElementById("id_nota").value = id_nota;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Aluno-turma</title>
+</head>
+<body>
+    <h1>CRUD de Aluno turma</h1>
+
+    <form action="/editar_aluno_turma" method="POST">
+        <label for="aluno">Aluno:</label>
+        <select id="aluno" name="aluno" required>
+            <% alunos.forEach(function(aluno) { %>
+            <option value="<%= aluno.aluno_id %>" data-id="<%= aluno.aluno_id %>">
+                <%= aluno.nome_aluno %>
+            </option>
+            <% }); %>
+        </select>
+        <br />
+
+        <label for="turma">Turma:</label>
+        <select id="turma" name="turma" required>
+            <% turmas.forEach(function(turma) { %>
+            <option
+                value="<%= turma.turma_id %>"
+                data-id="<%= turma.turma_id %>">
+                <%= turma.turma_id %>
+            </option>
+            <% }); %>
+        </select>
+        <br />
+
+        <button type="submit" name="action" value="alterar">Alterar</button>
+        <button type="submit" name="action" value="incluir">Alterar</button>
+        <input type="hidden" id="aluno_id" name="aluno_id" />
+        <input type="hidden" id="turma_id" name="turma_id" />
+    </form>
+
+    <h2>Associações de aluno e turma</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Aluno</th>
+                <th>Turma</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% Ass_Aluno_turmas.forEach(function(Ass_aluno_turma) { %>
+            <tr>
+              <td><%= Ass_aluno_turma.aluno_id %></td>
+              <td><%= Ass_aluno_turma.nome_aluno %></td>
+              <td>
+                  <button
+                    onclick="preencherFormulario ('<%= Ass_aluno_turma.aluno_id%>', '<%= Ass_aluno_turma.turma_id %>')"
+                  >
+                    Editar
+                  </button>
+
+                  <form
+                    action="/excluir_aluno_turma/<%= Ass_aluno_turma.aluno_id %>/ <%= Ass_aluno_turma.turma_id %>"
+                    method="POST"
+                  >
+                      <button type="submit">Excluir</button>
+                  </form>
+              </td>
+            </tr>
+           <% }); %>
+        </tbody>
+    </table>
+
+    <script>
+
+        function getAlunoNome(aluno_id) {
+          const alunos = "<%= JSON.stringify(alunos) %>";
+          const aluno = alunos.find((a) => a.aluno_id === aluno_id);
+          return aluno ? aluno.nome_aluno : "Aluno não encontrado";
+        }
+
+        function getTurma(turma_id) {
+            const turmas = "<%= JSON.stringify(turmas) %>";
+            const turma = turma.find(
+              (t) => t.turma_id === turma_id
+            );
+            return turma ? turma.turma_id : "Turma não encontrada";
+        }
+
+        function preencherFormulario(alunoId, turmaId) {
+            document.getElementById("aluno").value = alunoId;
+            document.getElementById("turma").value = turmaId;
+        }
+    </script>
+</body>
+</html>

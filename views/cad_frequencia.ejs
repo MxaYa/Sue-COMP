@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Frequência</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#birth-date').mask('00/00/0000');
+            $('#phone-number').mask('0000-0000');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <form action="/editar_frequencia" method="POST">
+                <div class="form-icon">
+                    <span>SUE</span>
+                </div>
+                <center><h3>Cadastro de Frequência</h3></center>
+                <div class="form-group">
+                    <label for="data_presenca">Data da Presença:</label>
+                    <input type="date" class="form-control item" id="data_presenca" name="data_presenca" placeholder="Data da Presença" required>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="presente" name="presente">
+                    <label class="form-check-label" for="presente">Presente</label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block create-account">Salvar</button>
+                </div>
+                <input type="hidden" id="id_frequencia" name="id_frequencia" />
+            </form>
+        </div>
+
+        <h2>Relação de Frequências Registradas</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Data da Presença</th>
+                    <th>Presente</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% frequencias.forEach(function(frequencia) { %>
+                <tr>
+                    <td><%= frequencia.data_presenca %></td>
+                    <td><%= frequencia.presente ? 'Sim' : 'Não' %></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="preencherFormulario('<%= frequencia.data_presenca %>', '<%= frequencia.presente %>', '<%= frequencia.id_frequencia %>')">Editar</button>
+                        <form action="/excluir_frequencia/<%= frequencia.id_frequencia %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function preencherFormulario(data_presenca, presente, id_frequencia) {
+            document.getElementById("data_presenca").value = data_presenca;
+            document.getElementById("presente").checked = presente;
+            document.getElementById("id_frequencia").value = id_frequencia;
+        }
+    </script>
+</body>
+</html>

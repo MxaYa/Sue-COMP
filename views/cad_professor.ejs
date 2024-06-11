@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Coordenador</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+</head>
+<body>
+    <h1>CRUD de Professores</h1>
+
+    <!-- Formulário para adicionar ou editar professores -->
+    <form action="/editar_professor" method="POST">
+        <label for="login_id">ID do Usuário:</label>
+        <input type="text" id="login_id" name="login_id" required />
+        <br />
+        <label for="area_de_ensino">Área de Ensino:</label>
+        <input type="text" id="area_de_ensino" name="area_de_ensino" required />
+        <br />
+        <button type="submit" name="action" value="alterar">Alterar</button>
+        <button type="submit" name="action" value="incluir">Incluir</button>
+        <input type="hidden" id="id_professor" name="id_professor" />
+    </form>
+
+    <!-- Tabela para exibir os professores -->
+    <h2>Relação de Professores Cadastrados</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID do Usuário</th>
+                <th>Área de Ensino</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% professores.forEach(function(professor) { %>
+            <tr>
+                <td><%= professor.login_id %></td>
+                <td><%= professor.area_de_ensino %></td>
+                <td>
+                    <button onclick="preencherFormulario('<%= professor.login_id %>', '<%= professor.area_de_ensino %>', '<%= professor.id_professor %>')">Editar</button>
+                    <form action="/excluir_professor/<%= professor.id_professor %>" method="POST">
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+
+    <script>
+        // Função para preencher os campos do formulário ao clicar em editar
+        function preencherFormulario(login_id, area_de_ensino, id_professor) {
+            document.getElementById("login_id").value = login_id;
+            document.getElementById("area_de_ensino").value = area_de_ensino;
+            document.getElementById("id_professor").value = id_professor;
+        }
+    </script>
+</body>
+</html>

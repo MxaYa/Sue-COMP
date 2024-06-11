@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Endereço</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $('#cep').mask('00000-000');
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-form">
+            <form action="/editar_endereco" method="POST">
+                <div class="form-icon">
+                    <span>SUE</span>
+                </div>
+                <center><h3>Cadastro de Endereço</h3></center>
+                <div class="form-group">
+                    <label for="rua">Nome da Rua:</label>
+                    <input type="text" class="form-control item" id="rua" name="rua" placeholder="Rua" required>
+                </div>
+                <div class="form-group">
+                    <label for="bairro">Nome do Bairro:</label>
+                    <input type="text" class="form-control item" id="bairro" name="bairro" placeholder="Bairro" required>
+                </div>
+                <div class="form-group">
+                    <label for="cidade">Nome da Cidade:</label>
+                    <input type="text" class="form-control item" id="cidade" name="cidade" placeholder="Cidade" required>
+                </div>
+                <div class="form-group">
+                    <label for="estado">Nome do Estado:</label>
+                    <input type="text" class="form-control item" id="estado" name="estado" placeholder="Estado" required>
+                </div>
+                <div class="form-group">
+                    <label for="pais">Nome do País:</label>
+                    <input type="text" class="form-control item" id="pais" name="pais" placeholder="País" required>
+                </div>
+                <div class="form-group">
+                    <label for="cep">Número do CEP:</label>
+                    <input type="text" class="form-control item" id="cep" name="cep" placeholder="CEP" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-block create-account">Salvar</button>
+                </div>
+                <input type="hidden" id="id_endereco" name="id_endereco" />
+            </form>
+        </div>
+
+        <h2>Relação de Endereços Cadastrados</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Rua</th>
+                    <th>Bairro</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th>País</th>
+                    <th>CEP</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% enderecos.forEach(function(endereco) { %>
+                <tr>
+                    <td><%= endereco.rua %></td>
+                    <td><%= endereco.bairro %></td>
+                    <td><%= endereco.cidade %></td>
+                    <td><%= endereco.estado %></td>
+                    <td><%= endereco.pais %></td>
+                    <td><%= endereco.cep %></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="preencherFormulario('<%= endereco.rua %>', '<%= endereco.bairro %>', '<%= endereco.cidade %>', '<%= endereco.estado %>', '<%= endereco.pais %>', '<%= endereco.cep %>', '<%= endereco.id_endereco %>')">Editar</button>
+                        <form action="/excluir_endereco/<%= endereco.id_endereco %>" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function preencherFormulario(rua, bairro, cidade, estado, pais, cep, id_endereco) {
+            document.getElementById("rua").value = rua;
+            document.getElementById("bairro").value = bairro;
+            document.getElementById("cidade").value = cidade;
+            document.getElementById("estado").value = estado;
+            document.getElementById("pais").value = pais;
+            document.getElementById("cep").value = cep;
+            document.getElementById("id_endereco").value = id_endereco;
+        }
+    </script>
+</body>
+</html>
