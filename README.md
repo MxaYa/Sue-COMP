@@ -2,8 +2,15 @@
 
 Lembre-se de organizar a criação do banco de forma correta, primeiro sem dependencia de foreing key e dps as com dependencia, não farei isso por ti ATT: max
 
-git push
-git commit -a
+//localização
+/workspaces/Sue-COMP/
+
+//adiciona arquivos não monitorados ao index
 git add -A
 
-/workspaces/Sue-COMP/
+//adiciona arquivos ao comit preparando eles para o envio
+git commit -a
+
+//Faz o envio
+git push
+
