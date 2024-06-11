@@ -14,3 +14,8 @@ git commit -a
 //Faz o envio
 git push
 
+//busca os arquivos em nuvem, para da o pull no repositorio
+git fetch
+
+//Soucer Controll na direita do VSCODE estará os arquivos encontrado usando o fetch, logo em seguida voec clicará no botão de pull logo acima do arquivo modificado.
+
