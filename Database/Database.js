@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize")
 
 const connection = new Sequelize("SUE", "root", "", {
-    host: "localhost",
+    host: "192.168.56.1",
     dialect: "mysql",
 });
 

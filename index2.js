@@ -401,75 +401,6 @@ app.post("/excluir_curso/:id", async (req, res) => {
 
 //-----------------------------------------------------------------------------
 
-app.get("/enderecos", (req, res) => {
-  Endereco.findAll({
-    raw: true,
-  }).then((enderecos) => {
-    res.render("cad_endereço", {
-      enderecos: enderecos,
-    });
-  });
-});
-
-app.post("/criar_endereco", async (req, res) => {
-  const { rua_Endereco, bairro_Endereco, cidade_Endereco, estado_Endereco, pais_Endereco, cep_Endereco } = req.body;
-  try {
-    await Endereco.create({
-      rua_Endereco,
-      bairro_Endereco,
-      cidade_Endereco,
-      estado_Endereco,
-      pais_Endereco,
-      cep_Endereco
-    });
-    res.status(201).redirect("/enderecos");
-  } catch (error) {
-    console.error("Erro ao criar endereço:", error);
-    res.status(500).json({ error: "Erro ao criar endereço." });
-  }
-});
-
-
-app.post("/editar_endereco/:id", async (req, res) => {
-  const { rua_Endereco, bairro_Endereco, cidade_Endereco, estado_Endereco, pais_Endereco, cep_Endereco } = req.body;
-  const id = req.params.id;
-  try {
-    const endereco = await Endereco.findByPk(id);
-    if (!endereco) {
-      return res.status(404).json({ error: "Endereço não encontrado." });
-    }
-    endereco.rua = rua_Endereco;
-    endereco.bairro = bairro_Endereco;
-    endereco.cidade = cidade_Endereco;
-    endereco.estado = estado_Endereco;
-    endereco.pais = pais_Endereco;
-    endereco.cep = cep_Endereco;
-    await endereco.save();
-    res.status(201).redirect("/enderecos");
-  } catch (error) {
-    console.error("Erro ao editar endereço:", error);
-    res.status(500).json({ error: "Erro ao editar endereço." });
-  }
-});
-
-app.post("/excluir_endereco/:id", async (req, res) => {
-  const id = req.params.id;
-  try {
-    const endereco = await Endereco.findByPk(id);
-    if (!endereco) {
-      return res.status(404).json({ error: "Endereço não encontrado." });
-    }
-    await endereco.destroy();
-    res.redirect("/enderecos");
-  } catch (error) {
-    console.error("Erro ao excluir endereço:", error);
-    res.status(500).json({ error: "Erro ao excluir endereço." });
-  }
-});
-
-//----------------------------------------------------------
-
-
 app.get("/frequencias", (req, res) => {
   Frequencia.findAll({
     raw: true,
@@ -1029,8 +960,66 @@ app.post("/excluir_aluno_turma/:id_aluno/:id_turma", async (req, res) => {
     res.status(500).send("Erro na exclusão de aluno turma: ");
   }
 });
+//---------------------------------------------------------------------------
+app.get("/enderecos", (req, res) => {
+  console.log("Iniciando busca de endereços...");
+  Endereco.findAll({
+    raw: true,
+    order: [["id_endereco", "DESC"]],
+  })
+    .then((enderecos) => {
+      console.log("Endereços encontrados:", enderecos);
+      res.render("cad_enderecos", { enderecos: enderecos });
+    })
+    .catch((err) => {
+      console.error("Erro ao buscar endereços:", err);
+      res.status(500).send("Erro interno ao buscar endereços");
+    });
+});
 
+// Rota para inserir ou editar endereços
+app.post("/editar_endereco", async (req, res) => {
+  const { rua, bairro, cidade, estado, pais, cep, id_endereco } = req.body;
 
+  try {
+    if (id_endereco) {
+      // Editar endereço existente
+      const endereco = await Endereco.findByPk(id_endereco);
+      if (endereco) {
+        endereco.rua = rua;
+        endereco.bairro = bairro;
+        endereco.cidade = cidade;
+        endereco.estado = estado;
+        endereco.pais = pais;
+        endereco.cep = cep;
+        await endereco.save();
+      }
+    } else {
+      // Criar novo endereço
+      await Endereco.create({ rua, bairro, cidade, estado, pais, cep });
+    }
+    res.redirect("/enderecos");
+  } catch (error) {
+    console.error("Erro ao editar/inserir endereço:", error);
+    res.status(500).send("Erro interno ao editar/inserir endereço");
+  }
+});
+
+// Rota para excluir endereços
+app.post("/excluir_endereco/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const endereco = await Endereco.findByPk(id);
+    if (!endereco) {
+      return res.status(404).json({ error: "Endereço não encontrado." });
+    }
+    await Endereco.destroy({ where: { id_endereco: id } });
+    res.redirect("/enderecos");
+  } catch (error) {
+    console.error("Erro ao excluir endereço:", error);
+    res.status(500).send("Erro interno ao excluir endereço");
+  }
+});
 
 
 
