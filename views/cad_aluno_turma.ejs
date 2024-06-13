@@ -13,8 +13,8 @@
         <label for="aluno">Aluno:</label>
         <select id="aluno" name="aluno" required>
             <% alunos.forEach(function(aluno) { %>
-            <option value="<% aluno.aluno_id %>" data-id="<%= aluno.aluno_id %>">
-                <%= aluno.nome_aluno %>
+            <option value="<%= aluno.id_aluno %>" data-id="<%= aluno.id_aluno %>">
+                <%= aluno.id_aluno %>
             </option>
             <% }); %>
         </select>
@@ -24,18 +24,18 @@
         <select id="turma" name="turma" required>
             <% turmas.forEach(function(turma) { %>
             <option
-                value="<%= turma.turma_id %>"
-                data-id="<% turma.turma_id %>">
-                <%= turma.turma_id %>
+                value="<%= turma.id_turma %>"
+                data-id="<%= turma.id_turma %>">
+                <%= turma.id_turma %>
             </option>
             <% }); %>
         </select>
         <br />
 
         <button type="submit" name="action" value="alterar">Alterar</button>
-        <button type="submit" name="action" value="incluir">Alterar</button>
-        <input type="hidden" id="aluno_id" name="aluno_id" />
-        <input type="hidden" id="turma_id" name="turma_id" />
+        <button type="submit" name="action" value="incluir">Incluir</button>
+        <input type="hidden" id="id_aluno" name="id_aluno" />
+        <input type="hidden" id="id_turma" name="id_turma" />
     </form>
 
     <h2>Associações de aluno e turma</h2>
@@ -48,19 +48,19 @@
             </tr>
         </thead>
         <tbody>
-            <%= Ass_aluno_turmas.forEach(function(Ass_aluno_turma) { %>
+            <% Ass_Aluno_turmaVWs.forEach(function(Ass_Aluno_turmaVWs) { %>
             <tr>
-              <td><%= Ass_aluno_turma.aluno_id %></td>
-              <td><%= Ass_aluno_turma.nome_aluno %></td>
+              <td><%= Ass_Aluno_turmaVWs.id_aluno %></td>
+              <td><%= Ass_Aluno_turmaVWs.id_turma %></td>
               <td>
                   <button
-                    onclick="preencherFormulario ('<%= Ass_aluno_turma.aluno_id%>', '<%= Ass_aluno_turma.turma_id %>')"
+                    onclick="preencherFormulario ('<%= Ass_Aluno_turmaVWs.id_aluno%>', '<%= Ass_Aluno_turmaVWs.id_turma %>')"
                   >
                     Editar
                   </button>
 
                   <form
-                    action="/excluir_aluno_turma/<% Ass_aluno_turma.aluno_id %>/ <%= Ass_aluno_turma.turma_id %>"
+                    action="/excluir_aluno_turma/<%= Ass_Aluno_turmaVWs.id_aluno %>/ <%= Ass_Aluno_turmaVWs.id_turma %>"
                     method="POST"
                   >
                       <button type="submit">Excluir</button>
@@ -73,18 +73,18 @@
 
     <script>
 
-        function getAlunoNome(aluno_id) {
+        function getAlunoNome(id_aluno) {
           const alunos = "<%= JSON.stringify(alunos) %>";
-          const aluno = alunos.find((a) => a.aluno_id === aluno_id);
+          const aluno = alunos.find((a) => a.id_aluno === id_aluno);
           return aluno ? aluno.nome_aluno : "Aluno não encontrado";
         }
 
-        function getTurma(turma_id) {
+        function getTurma(id_turma) {
             const turmas = "<%= JSON.stringify(turmas) %>";
             const turma = turma.find(
-              (t) => t.turma_id === turma_id
+              (t) => t.id_turma === id_turma
             );
-            return turma ? turma.turma_id : "Turma não encontrada";
+            return turma ? turma.id_turma : "Turma não encontrada";
         }
 
         function preencherFormulario(alunoId, turmaId) {

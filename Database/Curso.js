@@ -1,5 +1,5 @@
 const { DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database"); // Arquivo de configuração da conexão com o banco de dados
+const connection = require("./database"); // Arquivo de configuração da conexão com o banco de dados
 
 // Definição do modelo (MODEL) que corresponde à uma tabela do banco de dados.
 const Curso = connection.define(

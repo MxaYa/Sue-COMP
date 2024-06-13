@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 const connection = require("./Database/Database");
 
-//const Ass_aluno_turmaVW = require("./Database/Ass_Aluno_turmaVW");
+const Ass_aluno_turmaVW = require("./Database/Ass_Aluno_turmaVW");
 
 const Aluno = require("./Database/Aluno");
 
@@ -37,8 +37,6 @@ const Notas = require("./Database/Notas");
 const Pagamento = require("./Database/Pagamento");
 
 const Rep_financeiro = require("./Database/Rep_financeiro");
-
-const Status_aprovacao = require("./Database/Status_aprovacao");
 
 const Turma = require("./Database/Turma");
 
@@ -978,12 +976,12 @@ app.get("/aluno_turma", async (req, res) => {
     const alunos = await Aluno.findAll();
     const turmas = await Turma.findAll();
     const Ass_Aluno_turmas = await Ass_aluno_turma.findAll();
-    //const Ass_Aluno_turmaVWs = await Ass_aluno_turmaVW.findAll();
+    const Ass_Aluno_turmaVWs = await Ass_aluno_turmaVW.findAll();
     res.render("cad_aluno_turma.ejs", {
       alunos,
       turmas,
       Ass_Aluno_turmas,
-      //Ass_Aluno_turmaVWs,
+      Ass_Aluno_turmaVWs,
     });
   } catch (error) {
     console.error("Erro na busca de associações de turma aluno", error);
@@ -998,15 +996,15 @@ app.post("/editar_aluno_turma", async (req, res) => {
 
     if (action === "incluir") {
       await Ass_aluno_turma.create({
-        aluno_id: aluno,
-        turma_id: turma,
+        id_aluno: aluno,
+        id_turma: turma,
       });
       res.redirect("/aluno_turma");
     } else if (action === "alterar") {
-      const Temporario = req.body.temporario;
+      const id_aluno_turma = req.body.temporario;
       await Ass_aluno_turma.update(
-        { aluno_id: aluno,turma_id: turma},
-        {where: {Temporario}}
+        { id_aluno: aluno,id_turma: turma},
+        {where: {id_aluno_turma}}
       );
       res.redirect("/aluno_turma");
     } else {
@@ -1018,12 +1016,12 @@ app.post("/editar_aluno_turma", async (req, res) => {
   }
 });
 
-app.post("/excluir_aluno_turma/:aluno_id/:turma_id", async (req, res) => {
+app.post("/excluir_aluno_turma/:id_aluno/:id_turma", async (req, res) => {
   try {
-    const aluno_id = req.params.aluno_id;
-    const turma_id = req.params.turma_id;
+    const id_aluno = req.params.id_aluno;
+    const id_turma = req.params.id_turma;
     await Ass_aluno_turma.destroy({
-      where: { aluno_id: aluno_id, turma_id: turma_id},
+      where: { id_aluno: id_aluno, id_turma: id_turma},
     });
     res.redirect("/aluno_turma");
   } catch (error) {

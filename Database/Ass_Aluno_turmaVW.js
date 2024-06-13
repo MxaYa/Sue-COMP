@@ -1,5 +1,5 @@
 const{DataTypes, Model } = require("sequelize");
-const sequelize = require("./Database");
+const sequelize = require("./database");
 
 
 class Ass_aluno_turmaVW extends Model {} 
@@ -12,11 +12,11 @@ Ass_aluno_turmaVW.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        nome_aluno: {
+        nome: {
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        aluno_id: {
+        id_aluno: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -24,7 +24,7 @@ Ass_aluno_turmaVW.init(
                 key: "id_aluno",
               },
         },
-        turma_id: {
+        id_turma: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -32,15 +32,6 @@ Ass_aluno_turmaVW.init(
                 key: "id_turma",
               },
         },
-        status_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "Status_aprovacao",
-                key: "id_status",
-              },
-        },
-
     },
     {   
         sequelize,

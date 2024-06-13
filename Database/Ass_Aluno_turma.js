@@ -11,7 +11,7 @@ Ass_aluno_turma.init(
             primaryKey: true,
             autoIncrement: true,
         },
-        aluno_id: {
+        id_aluno: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -19,20 +19,12 @@ Ass_aluno_turma.init(
                 key: "id_aluno",
               },
         },
-        turma_id: {
+        id_turma: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: "Turma",
                 key: "id_turma",
-              },
-        },
-        status_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "Status_aprovacao",
-                key: "id_status",
               },
         },
 
