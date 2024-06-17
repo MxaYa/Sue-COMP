@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Professores</title>
+</head>
+<body>
+  <h1>CRUD de Professores</h1>
+
+<form action="/editar_professor" method="POST">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+    <br>
+    <label for="login_id">Login ID:</label>
+    <input type="text" id="login_id" name="login_id" required>
+    <br>
+    <label for="area_de_ensino">Área de Ensino:</label>
+    <input type="text" id="area_de_ensino" name="area_de_ensino" required>
+    <br>
+    <button type="submit" name="action" value="alterar">Alterar</button>
+    <button type="submit" name="action" value="incluir">Incluir</button>
+    <input type="hidden" id="id_professor" name="id_professor">
+</form>
+
+  
+
+  
+  <h2>Relação de Professores Cadastrados</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Login ID</th>
+        <th>Área de Ensino</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% professores.forEach(function(professor) { %>
+        <tr>
+          <td><%= professor.nome %></td>
+          <td><%= professor.login_id %></td>
+          <td><%= professor.area_de_ensino %></td>
+          <td>
+            
+            <button onclick="preencherFormulario('<%= professor.nome %>', '<%= professor.login_id %>', '<%= professor.area_de_ensino %>', '<%= professor.id_professor %>')">Editar</button>
+            <form action="/excluir_professor/<%= professor.id_professor %>" method="POST">
+              <button type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }); %>
+      
+        
+    </tbody>
+  </table>
+
+  <script>
+   
+    function preencherFormulario(nome, login_id, area_de_ensino, id_professor) {
+      document.getElementById("nome").value = nome;
+      document.getElementById("login_id").value = login_id;
+      document.getElementById("area_de_ensino").value = area_de_ensino;
+      document.getElementById("id_professor").value = id_professor;
+    }
+  </script>
+</body>
+</html>

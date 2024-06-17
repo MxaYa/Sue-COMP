@@ -599,58 +599,57 @@ app.post("/excluir_pagamento/:id_pagamento", async (req, res) => {
 app.get("/professores", (req, res) => {
   Professor.findAll({
     raw: true,
-  }).then((professores) => {
-    res.render("cad_professor", {
-      professores: professores,
+    order: [["id_professor", "DESC"]],
+  })
+    .then((professores) => {
+        res.render("cad_professores", { professores: professores });
+
+    })
+    .catch((err) => {
+      console.error("Erro ao buscar professores:", err);
+      res.status(500).send("Erro interno ao buscar professores");
     });
+});
+
+
+app.post("/editar_professor", async (req, res) => {
+    const { nome, login_id, area_de_ensino, id_professor } = req.body;
+    console.log("Dados recebidos:", nome, login_id, area_de_ensino, id_professor);
+  
+    try {
+      if (id_professor) {
+        
+        const professor = await Professor.findByPk(id_professor);
+        if (professor) {
+          professor.nome = nome;
+          professor.login_id = login_id;
+          professor.area_de_ensino = area_de_ensino;
+          await professor.save();
+        }
+      } else {
+        
+        await Professor.create({ nome, login_id, area_de_ensino });
+      }
+      res.redirect("/professores");
+    } catch (error) {
+      console.error("Erro ao editar/inserir professor:", error);
+      res.status(500).send("Erro interno ao editar/inserir professor");
+    }
   });
-});
+  
 
-app.post("/criar_professor", async (req, res) => {
-  const { area_de_ensino, login_id } = req.body;
-  try { 
-    await Pagamento.create({
-      area_de_ensino,
-      login_id,
-    });
-    res.status(201).redirect("/professores");
-  } catch (error) {
-    console.error("Erro ao criar professor:", error);
-    res.status(500).json({ error: "Erro ao criar professor." });
-  }
-});
-
-app.post("/editar_professor/:id_professor", async (req, res) => {
-  const { area_de_ensino, login_id } = req.body;
-  const id_professor = req.params.id_professor;
+app.post("/excluir_professor/:id", async (req, res) => {
   try {
-    const professor = await Professor.findByPk(id_professor);
+    const id = req.params.id;
+    const professor = await Professor.findByPk(id);
     if (!professor) {
       return res.status(404).json({ error: "Professor não encontrado." });
     }
-    professor.area_de_ensino = area_de_ensino;
-    professor.login_id = login_id;
-
-    await professor.save();
-    res.status(201).redirect("/professores");
-  } catch (error) {
-    console.error("Erro ao editar professores:", error);
-    res.status(500).json({ error: "Erro ao editar professores." });
-  }
-});
-
-app.post("/excluir_professor/:id_professor", async (req, res) => {
-  const id_professor = req.params.id_professor;
-  try {
-    const professor = await Professor.findByPk(id_professor);
-    if (!professor) {
-      return res.status(404).json({ error: "Professor não encontrado." });
-    }
-    await professor.destroy();
+    await Professor.destroy({ where: { id_professor: id } });
     res.redirect("/professores");
   } catch (error) {
     console.error("Erro ao excluir professor:", error);
-    res.status(500).json({ error: "Erro ao excluir professor." });
+    res.status(500).send("Erro interno ao excluir professor");
   }
 });
 

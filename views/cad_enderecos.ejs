@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Endereços</title>
+</head>
+<body>
+  <h1>CRUD de Endereços</h1>
+
+  <!-- Formulário para adicionar ou editar endereços -->
+  <form action="/editar_endereco" method="POST">
+    <label for="rua">Rua:</label>
+    <input type="text" id="rua" name="rua" required>
+    <br>
+    <label for="bairro">Bairro:</label>
+    <input type="text" id="bairro" name="bairro" required>
+    <br>
+    <label for="cidade">Cidade:</label>
+    <input type="text" id="cidade" name="cidade" required>
+    <br>
+    <label for="estado">Estado:</label>
+    <input type="text" id="estado" name="estado" required>
+    <br>
+    <label for="pais">País:</label>
+    <input type="text" id="pais" name="pais" required>
+    <br>
+    <label for="cep">CEP:</label>
+    <input type="text" id="cep" name="cep" required>
+    <br>
+    <button type="submit" name="action" value="alterar">Alterar</button>
+    <button type="submit" name="action" value="incluir">Incluir</button>
+    <input type="hidden" id="id_endereco" name="id_endereco">
+  </form>
+
+  <!-- Tabela para exibir os endereços -->
+  <h2>Relação de Endereços Cadastrados</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Rua</th>
+        <th>Bairro</th>
+        <th>Cidade</th>
+        <th>Estado</th>
+        <th>País</th>
+        <th>CEP</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% enderecos.forEach(function(endereco) { %>
+      <tr>
+        <td><%= endereco.rua %></td>
+        <td><%= endereco.bairro %></td>
+        <td><%= endereco.cidade %></td>
+        <td><%= endereco.estado %></td>
+        <td><%= endereco.pais %></td>
+        <td><%= endereco.cep %></td>
+        <td>
+          <!-- Botão para editar endereço -->
+          <button
+            onclick="preencherFormulario('<%= endereco.rua %>', '<%= endereco.bairro %>', '<%= endereco.cidade %>', '<%= endereco.estado %>', '<%= endereco.pais %>', '<%= endereco.cep %>', '<%= endereco.id_endereco %>')"
+          >
+            Editar
+          </button>
+          <!-- Botão para excluir endereço -->
+          <form
+            action="/excluir_endereco/<%= endereco.id_endereco %>"
+            method="POST"
+          >
+            <button type="submit">Excluir</button>
+          </form>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <script>
+    // Função para preencher os campos do formulário ao clicar em editar
+    function preencherFormulario(
+      rua,
+      bairro,
+      cidade,
+      estado,
+      pais,
+      cep,
+      id_endereco
+    ) {
+      document.getElementById("rua").value = rua;
+      document.getElementById("bairro").value = bairro;
+      document.getElementById("cidade").value = cidade;
+      document.getElementById("estado").value = estado;
+      document.getElementById("pais").value = pais;
+      document.getElementById("cep").value = cep;
+      document.getElementById("id_endereco").value = id_endereco;
+    }
+  </script>
+</body>
+</html>
