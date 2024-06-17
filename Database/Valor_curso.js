@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Valor_curso = connection.define(
     "valor_curso",
@@ -14,9 +14,9 @@ const Valor_curso = connection.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Curso",
+                model: "curso",
                 key: "id_curso",
-              },
+            },
         },
         valor: {
             type: DataTypes.DOUBLE,
@@ -32,17 +32,17 @@ const Valor_curso = connection.define(
         tableName: "valor_curso"
     }
 );
- async function syncValor_curso() {
-     try {
-         await Valor_curso.sync({ force: false});
-     } catch(error) {
-         console.error("Erro sync Valor Curso", error);
-     } 
- }
+async function syncValor_curso() {
+    try {
+        await Valor_curso.sync({ force: false });
+    } catch (error) {
+        console.error("Erro sync Valor Curso", error);
+    }
+}
 
- module.exports = Valor_curso;
+module.exports = Valor_curso;
 
- /*module.exports = {
-     Valor_curso: Valor_curso,
-     syncValor_curso: syncValor_curso
- };*/
+/*module.exports = {
+    Valor_curso: Valor_curso,
+    syncValor_curso: syncValor_curso
+};*/

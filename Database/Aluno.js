@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Aluno = connection.define(
     "aluno",
@@ -20,7 +20,7 @@ const Aluno = connection.define(
             references: {
                 model: "Usuario",
                 key: "id_usuario",
-              },
+            },
         },
         rep_financeiro_id: {
             type: DataTypes.INTEGER,
@@ -28,7 +28,7 @@ const Aluno = connection.define(
             references: {
                 model: "Rep_financeiro",
                 key: "id_rep_financeiro",
-              },
+            },
         },
         ativo: {
             type: DataTypes.TINYINT,
@@ -47,7 +47,7 @@ const Aluno = connection.define(
 
 async function syncAluno() {
     try {
-        await Aluno.sync({ force: false});
+        await Aluno.sync({ force: false });
     } catch (error) {
         console.error("Erro na sync aluno", error);
     }

@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Turma = connection.define(
     "turma",
@@ -10,25 +10,25 @@ const Turma = connection.define(
             primaryKey: true,
             autoIncrement: true,
             references: {
-                model: "Turma",
+                model: "turma",
                 key: "id_turma",
-              },
+            },
         },
         curso_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Curso",
+                model: "curso",
                 key: "id_curso",
-              },
+            },
         },
         disciplina_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Disciplina",
+                model: "disciplina",
                 key: "id_disciplina",
-              },
+            },
         },
         /*professor_id: {
             type: DataTypes.INTEGER,
@@ -44,16 +44,16 @@ const Turma = connection.define(
         tableName: "turma"
     }
 );
- async function syncTurma() {
-     try {
-         await Turma.sync({ force: false });
-     } catch (error) {
-         console.error("Erro sync Turma", error);
-     }
- }
+async function syncTurma() {
+    try {
+        await Turma.sync({ force: false });
+    } catch (error) {
+        console.error("Erro sync Turma", error);
+    }
+}
 
- module.exports = Turma;
- /*module.exports = {
-     Turma: Turma,
-     syncTurma: syncTurma
+module.exports = Turma;
+/*module.exports = {
+    Turma: Turma,
+    syncTurma: syncTurma
 };*/

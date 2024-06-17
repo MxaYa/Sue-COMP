@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Notas = connection.define(
     "notas",
@@ -14,17 +14,17 @@ const Notas = connection.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Aluno",
+                model: "aluno",
                 key: "id_aluno",
-              },
+            },
         },
         turma_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Turma",
+                model: "turma",
                 key: "id_turma",
-              },
+            },
         },
         descricao_da_nota: {
             type: DataTypes.TEXT,
@@ -47,10 +47,10 @@ const Notas = connection.define(
 
 async function syncNotas() {
     try {
-        await Notas.sync({ force: false});
+        await Notas.sync({ force: false });
     } catch (error) {
         console.error("Erro na sync de Notas", error);
-    } 
+    }
 }
 
 module.exports = Notas;

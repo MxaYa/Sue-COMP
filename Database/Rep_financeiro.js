@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Rep_financeiro = connection.define(
     "Rep_financeiro",
@@ -14,9 +14,9 @@ const Rep_financeiro = connection.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Usuario",
+                model: "usuario",
                 key: "id_usuario",
-              },
+            },
         },
         data_transacao: {
             type: DataTypes.DATE,
@@ -29,20 +29,20 @@ const Rep_financeiro = connection.define(
     },
     {
         timestamps: true,
-        tableName: "Rep_financeiro"
+        tableName: "rep_financeiro"
     }
 );
- async function syncRep_financeiro() {
-     try {
-         await Rep_financeiro.sync({ force: false});
-     } catch (error) {
-         console.error("Erro na sinc")
-     }
- }
+async function syncRep_financeiro() {
+    try {
+        await Rep_financeiro.sync({ force: false });
+    } catch (error) {
+        console.error("Erro na sinc")
+    }
+}
 
- module.exports = Rep_financeiro;
+module.exports = Rep_financeiro;
 
- /*module.exports = {
-     Rep_financeiro: Rep_financeiro,
-     syncRep_financeiro: syncRep_financeiro
- };*/
+/*module.exports = {
+    Rep_financeiro: Rep_financeiro,
+    syncRep_financeiro: syncRep_financeiro
+};*/

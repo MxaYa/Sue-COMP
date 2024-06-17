@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("./database"); // Arquivo de configuração da conexão com o banco de dados
 
-class DisciplinaCurso extends Model {}
+class DisciplinaCurso extends Model { }
 
 DisciplinaCurso.init(
   {
@@ -10,7 +10,7 @@ DisciplinaCurso.init(
       allowNull: false,
       primaryKey: true,
       references: {
-        model: "Disciplina",
+        model: "disciplina",
         key: "id_disciplina",
       },
     },
@@ -19,14 +19,14 @@ DisciplinaCurso.init(
       allowNull: false,
       primaryKey: true,
       references: {
-        model: "Curso",
+        model: "curso",
         key: "id_curso",
       },
     },
   },
   {
     sequelize,
-    modelName: "DisciplinaCurso",
+    modelName: "disciplinaCurso",
     tableName: "disciplina_curso",
     timestamps: true,
   }
@@ -43,5 +43,5 @@ async function sincronizarDisciplinaCurso() {
   }
 }
 
-DisciplinaCurso.sync({ force: false }).then(() => {});
+DisciplinaCurso.sync({ force: false }).then(() => { });
 module.exports = DisciplinaCurso;

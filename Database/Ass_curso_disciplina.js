@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Ass_curso_disciplina = connection.define(
     "Ass_curso_disciplina",
@@ -15,13 +15,13 @@ const Ass_curso_disciplina = connection.define(
     },
     {
         timestamps: true,
-        tableName: "Ass_curso_disciplina"
+        tableName: "ass_curso_disciplina"
     }
 );
 
 async function syncCurso_disciplina() {
     try {
-        await Ass_curso_disciplina.sync({force: false});
+        await Ass_curso_disciplina.sync({ force: false });
     } catch (error) {
         console.error("Erro na sync Associação curso e disciplina", error);
     } finally {

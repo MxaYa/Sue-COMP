@@ -1,29 +1,43 @@
-const { DataTypes } = require('sequelize');
-const connection = require('./database');
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
-const Professor = connection.define('Professor', {
-    id_professor: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-    },
-    
-    nome: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+const Professor = connection.define(
+    "professor",
+    {
+        id_professor: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        area_de_ensino: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        login_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
 
-    login_id: {
-        type: DataTypes.STRING,
-        allowNull: false
+
+            references: {
+                model: "usuario",
+                key: "id_usuario",
+            },
+        },
     },
-    area_de_ensino: {
-        type: DataTypes.STRING,
-        allowNull: false
+    {
+        timestamps: true,
+        tableName: "professor"
     }
-}, {
-    tableName: 'professor', 
-    timestamps: true
-});
+);
+
+async function syncProfessor() {
+    try {
+        await Professor.sync({ force: false });
+    } catch (error) {
+        console.error("Erro na sync Professor", error);
+    }
+}
 
 module.exports = Professor;
+

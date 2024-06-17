@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Pagamento = connection.define(
     "pagamento",
@@ -14,9 +14,9 @@ const Pagamento = connection.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Rep_financeiro",
+                model: "rep_financeiro",
                 key: "id_rep_financeiro",
-              },
+            },
         },
         valor_pago: {
             type: DataTypes.DECIMAL,
@@ -51,7 +51,7 @@ async function syncPagamento() {
         await Pagamento.sync({ force: false });
     } catch (error) {
         console.error("Erro na sync Pagamento", error);
-    } 
+    }
 }
 
 module.exports = Pagamento;

@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 
-const connection = require("./Database");
+const connection = require("./database");
 
 const usuario = connection.define(
     "usuarios",
@@ -31,9 +31,9 @@ const usuario = connection.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Endereco",
+                model: "endereco",
                 key: "id_endereco",
-              },
+            },
         },
     },
     {
@@ -42,11 +42,11 @@ const usuario = connection.define(
     }
 );
 
-async function syncUsuario(){
+async function syncUsuario() {
     try {
-        await usuario.sync({force: false });
+        await usuario.sync({ force: false });
     } catch (error) {
-        console.error("Erro Usuario.",error);
+        console.error("Erro Usuario.", error);
     }
 }
 

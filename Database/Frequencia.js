@@ -1,5 +1,5 @@
-const{DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const { DataTypes, Sequelize } = require("sequelize");
+const connection = require("./database");
 
 const Frequencia = connection.define(
     "Frequencia",
@@ -14,17 +14,17 @@ const Frequencia = connection.define(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Aluno",
+                model: "aluno",
                 key: "id_aluno",
-              },
+            },
         },
         turma_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: "Turma",
+                model: "turma",
                 key: "id_turma",
-              },
+            },
         },
         Data_Frequencia: {
             type: DataTypes.DATE,
@@ -37,21 +37,21 @@ const Frequencia = connection.define(
     },
     {
         timestamps: true,
-        tableName: "Frequencia"
+        tableName: "frequencia"
     }
 );
 
- async function syncFrenquencia() {
-     try {
-         await Frequencia.sync({force: false});
-     } catch (error) {
-         console.error("Erro na sync de Frenquencia", error);
-     } 
- }
+async function syncFrenquencia() {
+    try {
+        await Frequencia.sync({ force: false });
+    } catch (error) {
+        console.error("Erro na sync de Frenquencia", error);
+    }
+}
 
- module.exports = Frequencia;
+module.exports = Frequencia;
 
- /*module.exports ={
-     Frequencia: Frequencia,
-     syncFrenquencia: syncFrenquencia
- };*/
+/*module.exports ={
+    Frequencia: Frequencia,
+    syncFrenquencia: syncFrenquencia
+};*/

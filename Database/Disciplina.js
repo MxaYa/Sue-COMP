@@ -2,7 +2,7 @@
 
 // Importar os módulos necessários utilizados pelo SEQUELIZE
 const { DataTypes, Sequelize } = require("sequelize");
-const connection = require("./Database");
+const connection = require("./database");
 
 // Definição do modelo (MODEL) que corresponde à uma tabela do banco de dados.
 const Disciplina = connection.define( // começo da definição do objeto
@@ -38,7 +38,7 @@ async function syncDisciplina() {
     await Disciplina.sync({ force: false });
   } catch (error) {
     console.error("Erro ao sincronizar a tabela: ", error);
-  } 
+  }
 }
 
 //Disciplina.sync({ force: false }).then(() => {});

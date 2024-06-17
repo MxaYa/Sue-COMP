@@ -18,7 +18,7 @@ const Curso = connection.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Coordenador",
+        model: "coordenador",
         key: "id_coordenador",
       },
     },
