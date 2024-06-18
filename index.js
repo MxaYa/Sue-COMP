@@ -1,6 +1,15 @@
+const express = require("express"); 
+const app = express();
+app.set("view engine", "ejs");
 
+const port = 1046;
+
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // Carrega as variáveis de ambiente do arquivo .env
+require("dotenv").config();
 require("dotenv").config({ path: "./.env" });
 
 console.log("DB_HOST:", process.env.DB_HOST);
@@ -10,11 +19,7 @@ console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
 console.log("PORT:", process.env.PORT);
 
-const express = require("express"); 
-const app = express();
-app.set("view engine", "ejs");
-
-const port = process.env.PORT || 4000;
+// const port = process.env.PORT || 1046;
 
 
 const connection = require("./database/database");
@@ -64,11 +69,6 @@ connection
   .catch((msgErro) => {
       console.log(msgErro);
   });
-
-  //port = 1046;
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
   res.render("main");

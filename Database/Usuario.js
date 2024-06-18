@@ -1,4 +1,3 @@
-
 const { DataTypes } = require('sequelize');
 const connection = require('./database');
 const Endereco = require('./enderecos');
