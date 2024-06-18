@@ -4,7 +4,7 @@ const app = express();
 
 app.set("view engine", "ejs");
 
-//port = 1046;
+port = 1046;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
