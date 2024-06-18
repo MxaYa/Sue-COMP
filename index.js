@@ -55,7 +55,7 @@ const Valor_curso = require("./database/Valor_curso");
 
 const DisciplinaCursoVW = require("./database/DisciplinaCursoVW");
 const Professor = require("./database/professor");
-const res = require("express/lib/response");
+//const res = require("express/lib/response");
 
 
 
