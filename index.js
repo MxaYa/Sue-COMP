@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
+// require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
 require("dotenv").config({ path: "./.env" });
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
