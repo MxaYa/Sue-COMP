@@ -28,7 +28,7 @@ const Aluno = require("./database/Aluno");
 
 const Ass_aluno_turma = require("./database/Ass_Aluno_turma");
 
-const Coordenador = require("./database/Coordenador");
+// const Coordenador = require("./database/Coordenador");
 
 const Curso = require("./database/Curso");
 
