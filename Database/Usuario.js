@@ -1,42 +1,58 @@
-const { DataTypes } = require('sequelize');
-const connection = require('./database');
-const Endereco = require('./enderecos');
+const { DataTypes } = require("sequelize");
 
-const Usuario = connection.define('Usuario', {
-  id_usuario: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  telefone: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  cpf: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  endereco_id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Endereco,
-      key: 'id_endereco'
+const connection = require("./database");
+
+const usuario = connection.define(
+    "usuarios",
+    {
+        id_usuario: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            autoIncrement: true,
+        },
+        nome: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        telefone: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        email: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        cpf: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        endereco_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: "endereco",
+                key: "id_endereco",
+            },
+        },
     },
-    allowNull: false
-  }
-}, {
-  tableName: 'usuario',
-  timestamps: true
-});
+    {
+        timestamps: true,
+        tablename: "usuarios",
+    }
+);
 
-Usuario.belongsTo(Endereco, { foreignKey: 'endereco_id' });
+async function syncUsuario() {
+    try {
+        await usuario.sync({ force: false });
+    } catch (error) {
+        console.error("Erro Usuario.", error);
+    }
+}
 
-module.exports = Usuario;
+module.exports = usuario;
+
+/*module.exports =  {
+    usuario: usuario,
+    syncUsuario: syncUsuario
+}*/

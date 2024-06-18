@@ -1,5 +1,10 @@
+const Sequelize = require("sequelize")
 
-const Sequelize  = require('sequelize');
+/*const connection = new Sequelize("SUE", "root", "", {
+  host: "192.168.56.1",
+  dialect: "mysql",
+});*/
+
 
 
 const connection = new Sequelize(
@@ -22,7 +27,4 @@ const connection = new Sequelize(
   }
 );
 
-//module.exports = sequelize;
-
 module.exports = connection;
-

@@ -1,25 +1,21 @@
 const express = require("express"); 
+
 const app = express();
+
 app.set("view engine", "ejs");
 
-const port = 1046;
-
+port = 1046;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Carrega as variáveis de ambiente do arquivo .env
-require("dotenv").config();
+require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
 require("dotenv").config({ path: "./.env" });
-
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
 console.log("DB_PASS:", process.env.DB_PASS);
 console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
-console.log("PORT:", process.env.PORT);
-
-// const port = process.env.PORT || 1046;
 
 
 const connection = require("./database/database");
@@ -50,7 +46,7 @@ const Rep_financeiro = require("./database/Rep_financeiro");
 
 const Turma = require("./database/Turma");
 
-const Usuario = require("./database/usuario");
+const Usuario = require("./database/Usuario");
 
 const Valor_curso = require("./database/Valor_curso");
 
@@ -60,6 +56,31 @@ const res = require("express/lib/response");
 
 
 
+//DisciplinaCursoTable = DisciplinaCursoVW.sincronizarDisciplinaCursoVW();
+
+/*alunotable = Aluno.syncAluno();
+AssAT = Ass_aluno_turma.syncAss_Aluno_turma();
+coordenadorTable = Coordenador.syncCoordenador();
+cursotable = Curso.syncCurso();
+disciplinatable = Disciplina.syncDisciplina();
+DisciplinaCursoTable = DisciplinaCurso.sincronizarDisciplinaCurso();
+DCVW = DisciplinaCursoVW.sincronizarDisciplinaCursoVW();
+Enderecotable = Endereco.syncendereco();
+frequenciatable = Frequencia.syncFrenquencia();
+notastable = Notas.syncNotas();
+pagamentotable = Pagamento.syncPagamento();
+repfinanceiroTable = Rep_financeiro.syncRep_financeiro();
+StatusTable = Status_aprovacao.syncStatus_aprovacao();
+turmaTable = Turma.syncTurma();
+usuariotable = Usuario.syncUsuario();
+VC_table = Valor_curso.syncValor_curso();
+/*enderecoTable = endereco.syncendereco();
+
+status_de_aprovacaoTable = status_de_aprovacao.syncStatus();
+
+cursoTable = curso.syncCurso();*/
+
+//disciplinacurso = Disciplina.syncDisciplina();
 
 connection
   .authenticate()
@@ -817,61 +838,72 @@ app.post("/excluir_representante/:id_rep_financeiro", async (req, res) => {
     }
   });
 //------------------------------------------------------------------------------
-app.get("/usuarios", (req, res) => {
-  Usuario.findAll({
-    include: [Endereco],
-    order: [["id_usuario", "DESC"]],
-  })
-    .then((usuarios) => {
-        res.render("cad_usuario", { usuarios: usuarios });
-    })
-    .catch((err) => {
-      console.error("Erro ao buscar usuários:", err);
-      res.status(500).send("Erro interno ao buscar usuários");
+
+  app.get("/usuario", (req, res) => {
+    Usuario.findAll({
+      raw: true,
+    }).then((usuarios) => {
+      res.render("cad_usuario ", {
+        usuarios: usuarios,
+      });
     });
-});
+  });
 
-app.post("/editar_usuario", async (req, res) => {
-  const { nome, telefone, email, cpf, endereco_id, id_usuario } = req.body;
-  console.log("Dados recebidos:", nome, telefone, email, cpf, endereco_id, id_usuario);
+  app.post("/criar_usuario", async (req, res) => {
+    const { nome, telefone, email, cpf, endereco_id } = req.body;
+    try { 
+      await Usuario.create({
+        nome, 
+        telefone, 
+        email, 
+        cpf, 
+        endereco_id,
+      
+      });
+      res.status(201).redirect("/usuario");
+    } catch (error) {
+      console.error("Erro ao criar o Usuario:", error);
+      res.status(500).json({ error: "Erro ao criar  Status." });
+    }
+  });
 
-  try {
-    if (id_usuario) {
+  app.post("/editar_usuario/:id_usuario", async (req, res) => {
+    const { nome, telefone, email, cpf, endereco_id} = req.body;
+    const id_usuario = req.params.id_usuario;
+    try {
       const usuario = await Usuario.findByPk(id_usuario);
-      if (usuario) {
-        usuario.nome = nome;
-        usuario.telefone = telefone;
-        usuario.email = email;
-        usuario.cpf = cpf;
-        usuario.endereco_id = endereco_id;
-        await usuario.save();
+      if (!usuario) {
+        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
       }
-    } else {
-      await Usuario.create({ nome, telefone, email, cpf, endereco_id });
-    }
-    res.redirect("/usuarios");
-  } catch (error) {
-    console.error("Erro ao editar/inserir usuário:", error);
-    res.status(500).send("Erro interno ao editar/inserir usuário");
-  }
-});
-
-app.post("/excluir_usuario/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const usuario = await Usuario.findByPk(id);
-    if (!usuario) {
-      return res.status(404).json({ error: "Usuário não encontrado." });
-    }
-    await Usuario.destroy({ where: { id_usuario: id } });
-    res.redirect("/usuarios");
-  } catch (error) {
-    console.error("Erro ao excluir usuário:", error);
-    res.status(500).send("Erro interno ao excluir usuário");
-  }
-});
-
+      usuario.nome = nome;
+      usuario.telefone = telefone;
+      usuario.email = email;
+      usuario.cpf = cpf;
+      usuario.endereco_id = endereco_id;
+      
   
+      await usuario.save();
+      res.status(201).redirect("/usuarios");
+    } catch (error) {
+      console.error("Erro ao editar usuarios:", error);
+      res.status(500).json({ error: "Erro ao editar usuarios ." });
+    }
+  });
+
+  app.post("/excluir_usuarios/:id_usuario", async (req, res) => {
+    const id_usuario = req.params.id_usuario;
+    try {
+      const usuario = await Usuario.findByPk(id_usuario);
+      if (!usuario) {
+        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
+      }
+      await usuario.destroy();
+      res.redirect("/usuarios");
+    } catch (error) {
+      console.error("Erro ao excluir usuarios:", error);
+      res.status(500).json({ error: "Erro ao usuarios." });
+    }
+  });
 
 //--------------------------------------------------------------------------------
 

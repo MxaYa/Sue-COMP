@@ -20,6 +20,3 @@ git fetch
 //Soucer Controll na direita do VSCODE estará os arquivos encontrado usando o fetch, logo em seguida voec clicará no botão de pull logo acima do arquivo modificado.
 
 //quando editando um arquivo criado anteriormente o "git commit -m" é o merge, funciona,como? não sei, só usa
-
-
-//dkaslanmd
