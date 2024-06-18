@@ -46,7 +46,7 @@ const Rep_financeiro = require("./database/Rep_financeiro");
 
 const Turma = require("./database/Turma");
 
-const Usuario = require("./database/usuario");
+const Usuario = require("./database/Usuario");
 
 const Valor_curso = require("./database/Valor_curso");
 
@@ -838,61 +838,72 @@ app.post("/excluir_representante/:id_rep_financeiro", async (req, res) => {
     }
   });
 //------------------------------------------------------------------------------
-app.get("/usuarios", (req, res) => {
-  Usuario.findAll({
-    include: [Endereco],
-    order: [["id_usuario", "DESC"]],
-  })
-    .then((usuarios) => {
-        res.render("cad_usuario", { usuarios: usuarios });
-    })
-    .catch((err) => {
-      console.error("Erro ao buscar usuários:", err);
-      res.status(500).send("Erro interno ao buscar usuários");
+
+  app.get("/usuario", (req, res) => {
+    Usuario.findAll({
+      raw: true,
+    }).then((usuarios) => {
+      res.render("cad_usuario ", {
+        usuarios: usuarios,
+      });
     });
-});
+  });
 
-app.post("/editar_usuario", async (req, res) => {
-  const { nome, telefone, email, cpf, endereco_id, id_usuario } = req.body;
-  console.log("Dados recebidos:", nome, telefone, email, cpf, endereco_id, id_usuario);
+  app.post("/criar_usuario", async (req, res) => {
+    const { nome, telefone, email, cpf, endereco_id } = req.body;
+    try { 
+      await Usuario.create({
+        nome, 
+        telefone, 
+        email, 
+        cpf, 
+        endereco_id,
+      
+      });
+      res.status(201).redirect("/usuario");
+    } catch (error) {
+      console.error("Erro ao criar o Usuario:", error);
+      res.status(500).json({ error: "Erro ao criar  Status." });
+    }
+  });
 
-  try {
-    if (id_usuario) {
+  app.post("/editar_usuario/:id_usuario", async (req, res) => {
+    const { nome, telefone, email, cpf, endereco_id} = req.body;
+    const id_usuario = req.params.id_usuario;
+    try {
       const usuario = await Usuario.findByPk(id_usuario);
-      if (usuario) {
-        usuario.nome = nome;
-        usuario.telefone = telefone;
-        usuario.email = email;
-        usuario.cpf = cpf;
-        usuario.endereco_id = endereco_id;
-        await usuario.save();
+      if (!usuario) {
+        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
       }
-    } else {
-      await Usuario.create({ nome, telefone, email, cpf, endereco_id });
-    }
-    res.redirect("/usuarios");
-  } catch (error) {
-    console.error("Erro ao editar/inserir usuário:", error);
-    res.status(500).send("Erro interno ao editar/inserir usuário");
-  }
-});
-
-app.post("/excluir_usuario/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const usuario = await Usuario.findByPk(id);
-    if (!usuario) {
-      return res.status(404).json({ error: "Usuário não encontrado." });
-    }
-    await Usuario.destroy({ where: { id_usuario: id } });
-    res.redirect("/usuarios");
-  } catch (error) {
-    console.error("Erro ao excluir usuário:", error);
-    res.status(500).send("Erro interno ao excluir usuário");
-  }
-});
-
+      usuario.nome = nome;
+      usuario.telefone = telefone;
+      usuario.email = email;
+      usuario.cpf = cpf;
+      usuario.endereco_id = endereco_id;
+      
   
+      await usuario.save();
+      res.status(201).redirect("/usuarios");
+    } catch (error) {
+      console.error("Erro ao editar usuarios:", error);
+      res.status(500).json({ error: "Erro ao editar usuarios ." });
+    }
+  });
+
+  app.post("/excluir_usuarios/:id_usuario", async (req, res) => {
+    const id_usuario = req.params.id_usuario;
+    try {
+      const usuario = await Usuario.findByPk(id_usuario);
+      if (!usuario) {
+        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
+      }
+      await usuario.destroy();
+      res.redirect("/usuarios");
+    } catch (error) {
+      console.error("Erro ao excluir usuarios:", error);
+      res.status(500).json({ error: "Erro ao usuarios." });
+    }
+  });
 
 //--------------------------------------------------------------------------------
 
