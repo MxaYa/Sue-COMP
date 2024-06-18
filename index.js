@@ -51,10 +51,35 @@ const Valor_curso = require("./database/Valor_curso");
 
 const DisciplinaCursoVW = require("./database/DisciplinaCursoVW");
 const Professor = require("./database/professor");
-const res = require("express/lib/response");
+//const res = require("express/lib/response");
 
 
 
+//DisciplinaCursoTable = DisciplinaCursoVW.sincronizarDisciplinaCursoVW();
+
+/*alunotable = Aluno.syncAluno();
+AssAT = Ass_aluno_turma.syncAss_Aluno_turma();
+coordenadorTable = Coordenador.syncCoordenador();
+cursotable = Curso.syncCurso();
+disciplinatable = Disciplina.syncDisciplina();
+DisciplinaCursoTable = DisciplinaCurso.sincronizarDisciplinaCurso();
+DCVW = DisciplinaCursoVW.sincronizarDisciplinaCursoVW();
+Enderecotable = Endereco.syncendereco();
+frequenciatable = Frequencia.syncFrenquencia();
+notastable = Notas.syncNotas();
+pagamentotable = Pagamento.syncPagamento();
+repfinanceiroTable = Rep_financeiro.syncRep_financeiro();
+StatusTable = Status_aprovacao.syncStatus_aprovacao();
+turmaTable = Turma.syncTurma();
+usuariotable = Usuario.syncUsuario();
+VC_table = Valor_curso.syncValor_curso();
+/*enderecoTable = endereco.syncendereco();
+
+status_de_aprovacaoTable = status_de_aprovacao.syncStatus();
+
+cursoTable = curso.syncCurso();*/
+
+//disciplinacurso = Disciplina.syncDisciplina();
 
 connection
   .authenticate()
