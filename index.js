@@ -9,9 +9,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Carrega as variáveis de ambiente do arquivo .env
+require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
 require("dotenv").config({ path: "./.env" });
-
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
 console.log("DB_PASS:", process.env.DB_PASS);
@@ -19,7 +18,7 @@ console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
 console.log("PORT:", process.env.PORT);
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 1046;
 
 const connection = require("./database/database");
 
