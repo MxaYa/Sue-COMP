@@ -1,13 +1,6 @@
-const express = require("express"); 
-
-const app = express();
-
-app.set("view engine", "ejs");
 
 // port = 1046;
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 
 // require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
 require("dotenv").config({ path: "./.env" });
@@ -17,6 +10,12 @@ console.log("DB_PASS:", process.env.DB_PASS);
 console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
 console.log("PORT:", process.env.PORT);
+
+const express = require("express"); 
+
+const app = express();
+
+app.set("view engine", "ejs");
 
 const port = process.env.PORT || 1046;
 
@@ -59,31 +58,7 @@ const res = require("express/lib/response");
 
 
 
-//DisciplinaCursoTable = DisciplinaCursoVW.sincronizarDisciplinaCursoVW();
 
-/*alunotable = Aluno.syncAluno();
-AssAT = Ass_aluno_turma.syncAss_Aluno_turma();
-coordenadorTable = Coordenador.syncCoordenador();
-cursotable = Curso.syncCurso();
-disciplinatable = Disciplina.syncDisciplina();
-DisciplinaCursoTable = DisciplinaCurso.sincronizarDisciplinaCurso();
-DCVW = DisciplinaCursoVW.sincronizarDisciplinaCursoVW();
-Enderecotable = Endereco.syncendereco();
-frequenciatable = Frequencia.syncFrenquencia();
-notastable = Notas.syncNotas();
-pagamentotable = Pagamento.syncPagamento();
-repfinanceiroTable = Rep_financeiro.syncRep_financeiro();
-StatusTable = Status_aprovacao.syncStatus_aprovacao();
-turmaTable = Turma.syncTurma();
-usuariotable = Usuario.syncUsuario();
-VC_table = Valor_curso.syncValor_curso();
-/*enderecoTable = endereco.syncendereco();
-
-status_de_aprovacaoTable = status_de_aprovacao.syncStatus();
-
-cursoTable = curso.syncCurso();*/
-
-//disciplinacurso = Disciplina.syncDisciplina();
 
 connection
   .authenticate()
@@ -98,6 +73,9 @@ app.get("/", (req, res) => {
   res.render("main");
 });
 
+const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.get("/disciplinas", (req, res) => {
     Disciplina.findAll({
