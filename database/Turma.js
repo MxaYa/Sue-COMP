@@ -14,7 +14,7 @@ const Turma = connection.define(
                 key: "id_turma",
             },
         },
-        curso_id: {
+        id_curso: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -22,7 +22,7 @@ const Turma = connection.define(
                 key: "id_curso",
             },
         },
-        disciplina_id: {
+        id_disciplina: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

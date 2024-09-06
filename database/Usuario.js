@@ -27,7 +27,7 @@ const usuario = connection.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        endereco_id: {
+        id_endereco: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

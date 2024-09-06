@@ -10,7 +10,7 @@ const Valor_curso = connection.define(
             primaryKey: true,
             autoIncrement: true,
         },
-        curso_id: {
+        id_curso: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

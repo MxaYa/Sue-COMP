@@ -10,7 +10,7 @@ const Notas = connection.define(
             primaryKey: true,
             autoIncrement: true,
         },
-        aluno_id: {
+        id_aluno: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -18,7 +18,7 @@ const Notas = connection.define(
                 key: "id_aluno",
             },
         },
-        turma_id: {
+        id_turma: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

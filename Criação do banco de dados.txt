@@ -26,47 +26,47 @@ CREATE TABLE `usuario` (
   `telefone` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `cpf` varchar(255) NOT NULL,
-  `endereco_id` int(11) NOT NULL,
+  `id_endereco` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_usuario`),
-  FOREIGN KEY (`endereco_id`) REFERENCES `endereco` (`id_endereco`)
+  FOREIGN KEY (`id_endereco`) REFERENCES `endereco` (`id_endereco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `coordenador` (
   `id_coordenador` int(11) NOT NULL AUTO_INCREMENT,
-  `login_id` int(11) NOT NULL,
+  `id_login` int(11) NOT NULL,
   `unidade` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_coordenador`),
-  FOREIGN KEY (`login_id`) REFERENCES `usuario` (`id_usuario`)
+  FOREIGN KEY (`id_login`) REFERENCES `usuario` (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `professor` (
   `id_professor` int(11) NOT NULL AUTO_INCREMENT,
   `area_de_ensino` varchar(255) NOT NULL,
-  `login_id` int(11) NOT NULL,
+  `id_login` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_professor`),
-  FOREIGN KEY (`login_id`) REFERENCES `usuario` (`id_usuario`)
+  FOREIGN KEY (`id_login`) REFERENCES `usuario` (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `rep_financeiro` (
   `id_rep_financeiro` int(11) NOT NULL AUTO_INCREMENT,
-  `login_id` int(11) NOT NULL,
+  `id_login` int(11) NOT NULL,
   `data_transacao` datetime NOT NULL,
   `descricao` text DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_rep_financeiro`),
-  FOREIGN KEY (`login_id`) REFERENCES `usuario` (`id_usuario`)
+  FOREIGN KEY (`id_login`) REFERENCES `usuario` (`id_usuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `aluno` (
   `id_aluno` int(11) NOT NULL AUTO_INCREMENT,
-  `login_id` int(11) NOT NULL,
+  `id_login` int(11) NOT NULL,
   `rep_financeiro_id` int(11) NOT NULL,
   `ativo` tinyint(4) NOT NULL,
   `pagamento_curso` decimal(10,0) NOT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE `aluno` (
   `updatedAt` datetime NOT NULL,
   `nome` text NOT NULL,
   PRIMARY KEY (`id_aluno`),
-  FOREIGN KEY (`login_id`) REFERENCES `usuario` (`id_usuario`),
+  FOREIGN KEY (`id_login`) REFERENCES `usuario` (`id_usuario`),
   FOREIGN KEY (`rep_financeiro_id`) REFERENCES `rep_financeiro` (`id_rep_financeiro`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -112,69 +112,69 @@ CREATE TABLE `disciplina_curso` (
 
 CREATE TABLE `valor_curso` (
   `id_valor_curso` int(11) NOT NULL AUTO_INCREMENT,
-  `curso_id` int(11) NOT NULL,
+  `id_curso` int(11) NOT NULL,
   `valor` double NOT NULL,
   `turno` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_valor_curso`),
-  FOREIGN KEY (`curso_id`) REFERENCES `curso` (`id_curso`)
+  FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id_curso`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabelas relacionadas a turmas
 CREATE TABLE `turma` (
   `id_turma` int(11) NOT NULL AUTO_INCREMENT,
-  `curso_id` int(11) NOT NULL,
-  `disciplina_id` int(11) NOT NULL,
-  `professor_id` int(11) NOT NULL,
+  `id_curso` int(11) NOT NULL,
+  `id_disciplina` int(11) NOT NULL,
+  `id_professor` int(11) NOT NULL,
   `horario` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_turma`),
-  FOREIGN KEY (`curso_id`) REFERENCES `curso` (`id_curso`),
-  FOREIGN KEY (`disciplina_id`) REFERENCES `disciplina` (`id_disciplina`),
-  FOREIGN KEY (`professor_id`) REFERENCES `professor` (`id_professor`)
+  FOREIGN KEY (`id_curso`) REFERENCES `curso` (`id_curso`),
+  FOREIGN KEY (`id_disciplina`) REFERENCES `disciplina` (`id_disciplina`),
+  FOREIGN KEY (`id_professor`) REFERENCES `professor` (`id_professor`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Tabelas associativas e vistas
 CREATE TABLE `ass_aluno_turma` (
   `id_aluno_turma` int(11) NOT NULL AUTO_INCREMENT,
-  `aluno_id` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
+  `id_aluno` int(11) NOT NULL,
+  `id_turma` int(11) NOT NULL,
+  `id_status` int(11) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_aluno_turma`),
-  FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id_aluno`),
-  FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id_turma`),
-  FOREIGN KEY (`status_id`) REFERENCES `status_aprovacao` (`id_status`)
+  FOREIGN KEY (`id_aluno`) REFERENCES `aluno` (`id_aluno`),
+  FOREIGN KEY (`id_turma`) REFERENCES `turma` (`id_turma`),
+  FOREIGN KEY (`id_status`) REFERENCES `status_aprovacao` (`id_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `frequencia` (
   `id_frequencia` int(11) NOT NULL AUTO_INCREMENT,
-  `aluno_id` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
+  `id_aluno` int(11) NOT NULL,
+  `id_turma` int(11) NOT NULL,
   `Data_Frequencia` datetime NOT NULL,
   `Presenca` tinyint(1) NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_frequencia`),
-  FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id_aluno`),
-  FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id_turma`)
+  FOREIGN KEY (`id_aluno`) REFERENCES `aluno` (`id_aluno`),
+  FOREIGN KEY (`id_turma`) REFERENCES `turma` (`id_turma`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `notas` (
   `id_notas` int(11) NOT NULL AUTO_INCREMENT,
-  `aluno_id` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
+  `id_aluno` int(11) NOT NULL,
+  `id_turma` int(11) NOT NULL,
   `descricao_da_nota` text DEFAULT NULL,
   `valor_nota` double NOT NULL,
   `data_da_nota` datetime NOT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id_notas`),
-  FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id_aluno`),
-  FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id_turma`)
+  FOREIGN KEY (`id_aluno`) REFERENCES `aluno` (`id_aluno`),
+  FOREIGN KEY (`id_turma`) REFERENCES `turma` (`id_turma`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `pagamento` (
@@ -205,11 +205,11 @@ CREATE TABLE `vw_disciplina_curso` (
 CREATE TABLE `vwass_aluno_turma` (
   `id_aluno_turma` int(11) NOT NULL AUTO_INCREMENT,
   `nome_aluno` text NOT NULL,
-  `aluno_id` int(11) NOT NULL,
-  `turma_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
+  `id_aluno` int(11) NOT NULL,
+  `id_turma` int(11) NOT NULL,
+  `id_status` int(11) NOT NULL,
   PRIMARY KEY (`id_aluno_turma`),
-  FOREIGN KEY (`aluno_id`) REFERENCES `aluno` (`id_aluno`),
-  FOREIGN KEY (`turma_id`) REFERENCES `turma` (`id_turma`),
-  FOREIGN KEY (`status_id`) REFERENCES `status_aprovacao` (`id_status`)
+  FOREIGN KEY (`id_aluno`) REFERENCES `aluno` (`id_aluno`),
+  FOREIGN KEY (`id_turma`) REFERENCES `turma` (`id_turma`),
+  FOREIGN KEY (`id_status`) REFERENCES `status_aprovacao` (`id_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

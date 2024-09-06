@@ -10,7 +10,7 @@ const Rep_financeiro = connection.define(
             primaryKey: true,
             autoIncrement: true,
         },
-        login_id: {
+        id_login: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

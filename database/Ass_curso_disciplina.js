@@ -4,11 +4,11 @@ const connection = require("./database");
 const Ass_curso_disciplina = connection.define(
     "Ass_curso_disciplina",
     {
-        curso_id: {
+        id_curso: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        disciplina_id: {
+        id_disciplina: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

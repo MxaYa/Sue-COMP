@@ -14,7 +14,7 @@ const Aluno = connection.define(
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        login_id: {
+        id_login: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
@@ -22,7 +22,7 @@ const Aluno = connection.define(
                 key: "id_usuario",
             },
         },
-        rep_financeiro_id: {
+        id_rep_financeiro: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {

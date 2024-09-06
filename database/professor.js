@@ -14,11 +14,9 @@ const Professor = connection.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        login_id: {
+        id_login: {
             type: DataTypes.INTEGER,
             allowNull: false,
-
-
             references: {
                 model: "usuario",
                 key: "id_usuario",
