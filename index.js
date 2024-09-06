@@ -3,13 +3,13 @@
 
 
 // require("dotenv").config(); // Carrega as variáveis de ambiente do arquivo .env
-require("dotenv").config({ path: "./.env" });
+/*require("dotenv").config({ path: "./.env" });
 console.log("DB_HOST:", process.env.DB_HOST);
 console.log("DB_USER:", process.env.DB_USER);
 console.log("DB_PASS:", process.env.DB_PASS);
 console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
-console.log("PORT:", process.env.PORT);
+console.log("PORT:", process.env.PORT);*/
 
 const express = require("express"); 
 
@@ -17,7 +17,7 @@ const app = express();
 
 app.set("view engine", "ejs");
 
-const port = process.env.PORT || 1046;
+//const port = process.env.PORT || 1046;
 
 
 const connection = require("./database/database");
@@ -57,7 +57,7 @@ const Professor = require("./database/professor");
 const res = require("express/lib/response");
 
 
-
+const port = 1046;
 
 
 connection
@@ -92,40 +92,57 @@ app.get("/disciplinas", (req, res) => {
   
   
 
-  app.post("/editar_disciplina", async (req, res) => {
-    const { nome_disciplina, valor_disciplina, descricao_disciplina, action } =
-      req.body;
-    const id = req.params.id;
+  app.post("/editar_disciplina/:id_disciplina?", async (req, res) => {
+    const { nome_disciplina, valor_disciplina, descricao_disciplina, action } = req.body;
+    const { id_disciplina } = req.params; // Agora pega o id_disciplina do parâmetro de rota, se disponível
+  
     console.log(
-      "****Dados disciplina: => ESTOU EM /editar_disciplina",
+      "**** Dados disciplina: => ESTOU EM /editar_disciplina",
       nome_disciplina,
       valor_disciplina,
       descricao_disciplina,
       action,
-      id
+      id_disciplina
     );
-
-    if (action === "incluir") {
-      try {
-        //const { nome_disciplina, valor_disciplina, descricao_disciplina } = req.body;
-        const id = req.params.id;
+  
+    try {
+      if (action === "incluir") {
+        // Inserção de nova disciplina
         await Disciplina.create({
           nome_disciplina,
           valor_disciplina,
           descricao_disciplina,
         });
-        //res.status(201).json(disciplina);
         res.status(201).redirect("/disciplinas");
-      } catch (error) {
-        console.error(
-          "Erro ao inserir dados PARA A DISCIPLINA: /editardisciplina",
-          error
+      } else if (action === "editar" && id_disciplina) {
+        // Edição de disciplina existente
+        await Disciplina.update(
+          {
+            nome_disciplina,
+            valor_disciplina,
+            descricao_disciplina,
+          },
+          { where: { id_disciplina } }
         );
-        res.status(500).json({
-          error: "Erro ao inserir dados PARA A DISCIPLINA. /editardisciplina",
-        });
+        res.status(200).redirect("/disciplinas");
+      } else if (action === "excluir" && id_disciplina) {
+        // Exclusão de disciplina existente
+        await Disciplina.destroy({ where: { id_disciplina } });
+        res.status(200).redirect("/disciplinas");
+      } else {
+        res.status(400).json({ error: "Ação desconhecida ou ID inválido." });
       }
+    } catch (error) {
+      console.error(
+        "Erro ao processar dados PARA A DISCIPLINA: /editar_disciplina",
+        error
+      );
+      res.status(500).json({
+        error: "Erro ao processar dados PARA A DISCIPLINA. /editar_disciplina",
+      });
     }
+  });
+  
 
     if (action === "alterar") {
       try {
@@ -158,7 +175,6 @@ app.get("/disciplinas", (req, res) => {
         });
       }
     }
-  });
   
 
   app.post("/excluir_disciplina/:id", async (req, res) => {
@@ -281,7 +297,7 @@ app.post("/criar_coordenador", async (req, res) => {
       usuario,
       unidade,
     });
-    res.status(201).redirect("/coordenadores");
+    res.status(201).redirect("/coordenador");
   } catch (error) {
     console.error("Erro ao criar coordenador:", error);
     res.status(500).json({ error: "Erro ao criar coordenador." });
@@ -299,7 +315,7 @@ app.post("/editar_coordenador/:id", async (req, res) => {
     coordenador.usuario = usuario;
     coordenador.unidade = unidade;
     await coordenador.save();
-    res.status(201).redirect("/coordenadores");
+    res.status(201).redirect("/coordenador");
   } catch (error) {
     console.error("Erro ao editar coordenador:", error);
     res.status(500).json({ error: "Erro ao editar coordenador." });
@@ -319,7 +335,7 @@ app.post("/excluir_coordenador/:id", async (req, res) => {
         id_coordenador: id,
       },
     });
-    res.redirect("/coordenadores");
+    res.redirect("/coordenador");
   } catch (error) {
     console.error("Erro ao excluir coordenador:", error);
     res.status(500).json({ error: "Erro ao excluir coordenador." });

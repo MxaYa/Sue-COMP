@@ -6,7 +6,7 @@ const connection = require("./database");
 
 // Definição do modelo (MODEL) que corresponde à uma tabela do banco de dados.
 const Disciplina = connection.define( // começo da definição do objeto
-  "disciplina", //  primeiro parametro nome do model
+  "disciplina", // primeiro parâmetro: nome do model
   {
     id_disciplina: {
       type: DataTypes.INTEGER,
@@ -35,17 +35,16 @@ const Disciplina = connection.define( // começo da definição do objeto
 
 async function syncDisciplina() {
   try {
-    await Disciplina.sync({ force: false });
+    // Use `alter` para ajustar a tabela sem excluir dados existentes
+    await Disciplina.sync({ alter: true });
+    console.log("Tabela 'disciplina' sincronizada com sucesso!");
   } catch (error) {
-    console.error("Erro ao sincronizar a tabela: ", error);
+    console.error("Erro ao sincronizar a tabela 'disciplina': ", error);
   }
 }
 
-//Disciplina.sync({ force: false }).then(() => {});
-
-module.exports = Disciplina;
-/*module.exports = {
-    Disciplina: Disciplina,
-    syncDisciplina: syncDisciplina,
-};*/
-//module.exports = sincronizarDisciplina();
+// Exporta o modelo e a função de sincronização
+module.exports = {
+  Disciplina,
+  syncDisciplina,
+};

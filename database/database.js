@@ -1,13 +1,17 @@
-const {Sequelize} = require("sequelize")
+const { Sequelize } = require("sequelize");
 
-/*const connection = new Sequelize("SUE", "root", "", {
-  host: "192.168.56.1",
+const connection = new Sequelize("SUE", "root", "", {
+  host: "localhost",
   dialect: "mysql",
-});*/
+  port: 3306, // ou a porta do seu servidor MySQL
+});
+
+module.exports = connection;
 
 
 
-const connection = new Sequelize(
+
+/*const connection = new Sequelize(
   process.env.DB_NAME,
   process.env.DB_USER,
   process.env.DB_PASS,
@@ -25,8 +29,6 @@ const connection = new Sequelize(
       idle: 10000,
     },
   }
-);
-
-module.exports = connection;
+);*/
 
 //

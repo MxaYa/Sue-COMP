@@ -31,8 +31,8 @@
                     <input type="text" class="form-control item" id="descricao_disciplina" name="descricao_disciplina" placeholder="Descrição" required>
                 </div>
                 <div class="form-group">
-                    <label for="carga_horaria">Carga Horária:</label>
-                    <input type="text" class="form-control item" id="carga_horaria" name="carga_horaria" placeholder="Carga Horária" required>
+                    <label for="valor_disciplina">Carga Horária:</label>
+                    <input type="text" class="form-control item" id="valor_disciplina" name="valor_disciplina" placeholder="Carga Horária" required>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-block create-account" name="action" value="incluir">Salvar</button>
@@ -52,13 +52,13 @@
                 </tr>
             </thead>
             <tbody>
-                <% disciplinas.forEach(function(disciplina) { %>
+                <% disciplinas.forEach(function(Disciplina) { %>
                 <tr>
-                    <td><%= disciplina.nome_disciplina %></td>
-                    <td><%= disciplina.descricao_disciplina %></td>
-                    <td><%= disciplina.carga_horaria %></td>
+                    <td><%= Disciplina.nome_disciplina %></td>
+                    <td><%= Disciplina.descricao_disciplina %></td>
+                    <td><%= Disciplina.valor_disciplina %></td>
                     <td>
-                        <button class="btn btn-primary" onclick="preencherFormulario('<%= disciplina.nome_disciplina %>', '<%= disciplina.descricao_disciplina %>', '<%= disciplina.carga_horaria %>', '<%= disciplina.id_disciplina %>')">Editar</button>
+                        <button class="btn btn-primary" onclick="preencherFormulario('<%= disciplina.nome_disciplina %>', '<%= disciplina.descricao_disciplina %>', '<%= disciplina.valor_disciplina %>', '<%= disciplina.id_disciplina %>')">Editar</button>
                         <form action="/excluir_disciplina/<%= disciplina.id_disciplina %>" method="POST" style="display:inline;">
                             <button type="submit" class="btn btn-danger">Excluir</button>
                         </form>
@@ -70,10 +70,10 @@
     </div>
 
     <script>
-        function preencherFormulario(nome_disciplina, descricao_disciplina, carga_horaria, id_disciplina) {
+        function preencherFormulario(nome_disciplina, descricao_disciplina, valor_disciplina, id_disciplina) {
             document.getElementById("nome_disciplina").value = nome_disciplina;
             document.getElementById("descricao_disciplina").value = descricao_disciplina;
-            document.getElementById("carga_horaria").value = carga_horaria;
+            document.getElementById("valor_disciplina").value = valor_disciplina;
             document.getElementById("id_disciplina").value = id_disciplina;
         }
     </script>
