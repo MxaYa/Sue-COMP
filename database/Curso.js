@@ -1,9 +1,8 @@
-const { DataTypes, Sequelize } = require("sequelize");
-const connection = require("./database"); // Arquivo de configuração da conexão com o banco de dados
+import { DataTypes } from 'sequelize';
+import connection from './database.js';
 
-// Definição do modelo (MODEL) que corresponde à uma tabela do banco de dados.
 const Curso = connection.define(
-  "curso",
+  'curso',
   {
     id_curso: {
       type: DataTypes.INTEGER,
@@ -18,34 +17,16 @@ const Curso = connection.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "coordenador",
-        key: "id_coordenador",
+        model: 'coordenador',
+        key: 'id_coordenador',
       },
     },
   },
   {
-    timestamps: true, // Habilita a criação automática de campos de timestamp
-    tableName: "curso", // Nome da tabela no banco de dados
+    timestamps: true,
+    tableName: 'curso',
   }
 );
 
-async function sincronizarCurso() {
-  try {
-    await Curso.sync({ force: false });
-  } catch (error) {
-    console.error("Erro ao sincronizar a tabela: ", error);
-  } finally {
-    await connection.close();
-    console.log("Conexão fechada.");
-  }
-}
 
-//Curso.sync({ force: false }).then(() => {});
-
-module.exports = Curso;
-//module.exports = sincronizarCurso();
-
-/* module.exports = {
-    Curso: Curso,
-    sincronizarCurso: sincronizarCurso
-  }; */
+export default Curso;

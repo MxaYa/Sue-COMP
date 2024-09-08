@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+import { Sequelize } from 'sequelize';
 
 const connection = new Sequelize("SUE", "root", "", {
   host: "localhost",
@@ -6,7 +6,7 @@ const connection = new Sequelize("SUE", "root", "", {
   port: 3306, // ou a porta do seu servidor MySQL
 });
 
-module.exports = connection;
+export default connection;
 
 
 

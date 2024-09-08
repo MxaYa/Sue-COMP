@@ -1,5 +1,5 @@
-const { DataTypes, Model } = require("sequelize");
-const sequelize = require("./database"); // Arquivo de configuração da conexão com o banco de dados
+import { DataTypes, Model } from 'sequelize';
+import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
 
 class DisciplinaCursoVW extends Model { }
 
@@ -10,28 +10,26 @@ DisciplinaCursoVW.init(
       allowNull: false,
       primaryKey: true,
       references: {
-        model: "disciplina",
-        key: "id_disciplina",
+        model: 'disciplina',
+        key: 'id_disciplina',
       },
     },
     nome_disciplina: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: false,
     },
     id_curso: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
-        model: "curso",
-        key: "id_curso",
+        model: 'curso',
+        key: 'id_curso',
       },
     },
     nome_curso: {
       type: DataTypes.STRING,
       allowNull: false,
-      primaryKey: false,
     },
     Presenca: {
       type: DataTypes.TINYINT,
@@ -40,22 +38,21 @@ DisciplinaCursoVW.init(
   },
   {
     sequelize,
-    modelName: "disciplinaCursoVW",
-    tableName: "vw_disciplina_curso",
+    modelName: 'disciplinaCursoVW',
+    tableName: 'vw_disciplina_curso',
     timestamps: false,
   }
 );
 
-async function sincronizarDisciplinaCursoVW() {
+export async function sincronizarDisciplinaCursoVW() {
   try {
     await DisciplinaCursoVW.sync({ force: false });
   } catch (error) {
-    console.error("Erro ao sincronizar a tabela: ", error);
+    console.error('Erro ao sincronizar a tabela: ', error);
   } finally {
-    await connection.close();
-    console.log("Conexão fechada.");
+    await sequelize.close(); // Corrija a referência ao sequelize
+    console.log('Conexão fechada.');
   }
 }
 
-DisciplinaCursoVW.sync({ force: false }).then(() => { });
-module.exports = DisciplinaCursoVW;
+export default DisciplinaCursoVW;

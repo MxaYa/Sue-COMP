@@ -1,52 +1,47 @@
-const { DataTypes, Model } = require("sequelize");
-const sequelize = require("./database");
+import { DataTypes, Model } from 'sequelize';
+import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
 
 class Ass_aluno_turma extends Model { }
 
 Ass_aluno_turma.init(
-    {
-        id_aluno_turma: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        id_aluno: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "aluno",
-                key: "id_aluno",
-            },
-        },
-        id_turma: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "turma",
-                key: "id_turma",
-            },
-        },
-
+  {
+    id_aluno_turma: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    {
-        sequelize,
-        modelName: "ass_Aluno_turma",
-        tableName: "ass_Aluno_turma",
-        timestamps: true,
-    }
+    id_aluno: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'aluno',
+        key: 'id_aluno',
+      },
+    },
+    id_turma: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'turma',
+        key: 'id_turma',
+      },
+    },
+  },
+  {
+    sequelize,
+    modelName: 'ass_aluno_turma',
+    tableName: 'ass_aluno_turma',
+    timestamps: true,
+  }
 );
 
-async function syncAss_Aluno_turma() {
-    try {
-        await Ass_aluno_turma.sync({ force: true });
-    } catch (error) {
-        console.error("Erro na sincronização de aluno turma: ", error);
-    } finally {
-        await connection.close();
-        console.log("Conexão fechada.");
-    }
+export async function syncAss_aluno_turma() {
+  try {
+    await Ass_aluno_turma.sync({ force: false });
+  } catch (error) {
+    console.error('Erro na sincronização de aluno turma: ', error);
+  }
 }
 
-Ass_aluno_turma.sync({ force: false }).then(() => { });
-module.exports = Ass_aluno_turma;
+export default Ass_aluno_turma;

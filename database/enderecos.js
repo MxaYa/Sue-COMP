@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const connection = require('./database');
+import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
 
-const Endereco = connection.define('Endereco', {
+const Endereco = sequelize.define('Endereco', {
   id_endereco: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -35,4 +35,4 @@ const Endereco = connection.define('Endereco', {
   timestamps: true,
 });
 
-module.exports = Endereco;
+export default Endereco;

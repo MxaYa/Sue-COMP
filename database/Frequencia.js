@@ -1,57 +1,48 @@
-const { DataTypes, Sequelize } = require("sequelize");
-const connection = require("./database");
+import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
 
-const Frequencia = connection.define(
-    "Frequencia",
-    {
-        id_frequencia: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        id_aluno: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "aluno",
-                key: "id_aluno",
-            },
-        },
-        id_turma: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "turma",
-                key: "id_turma",
-            },
-        },
-        Data_Frequencia: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        Presenca: {
-            type: DataTypes.TINYINT,
-            allowNull: false,
-        },
+const Frequencia = sequelize.define('Frequencia', {
+  id_frequencia: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  id_aluno: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'aluno',
+      key: 'id_aluno',
     },
-    {
-        timestamps: true,
-        tableName: "frequencia"
-    }
-);
+  },
+  id_turma: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'turma',
+      key: 'id_turma',
+    },
+  },
+  Data_Frequencia: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  Presenca: {
+    type: DataTypes.TINYINT,
+    allowNull: false,
+  },
+}, {
+  timestamps: true,
+  tableName: 'frequencia',
+});
 
-async function syncFrenquencia() {
-    try {
-        await Frequencia.sync({ force: false });
-    } catch (error) {
-        console.error("Erro na sync de Frenquencia", error);
-    }
+export async function syncFrequencia() {
+  try {
+    await Frequencia.sync({ force: false });
+  } catch (error) {
+    console.error('Erro na sync de Frequencia', error);
+  }
 }
 
-module.exports = Frequencia;
-
-/*module.exports ={
-    Frequencia: Frequencia,
-    syncFrenquencia: syncFrenquencia
-};*/
+export default Frequencia;

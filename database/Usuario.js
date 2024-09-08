@@ -1,58 +1,48 @@
-const { DataTypes } = require("sequelize");
+import { DataTypes } from 'sequelize';
+import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
 
-const connection = require("./database");
-
-const usuario = connection.define(
-    "usuarios",
-    {
-        id_usuario: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-            autoIncrement: true,
-        },
-        nome: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        telefone: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        cpf: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        id_endereco: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: "endereco",
-                key: "id_endereco",
-            },
-        },
+const Usuario = sequelize.define('Usuario', {
+  id_usuario: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  nome: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  telefone: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  cpf: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  id_endereco: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'endereco',
+      key: 'id_endereco',
     },
-    {
-        timestamps: true,
-        tablename: "usuarios",
-    }
-);
+  },
+}, {
+  timestamps: true,
+  tableName: 'usuarios',
+});
 
-async function syncUsuario() {
-    try {
-        await usuario.sync({ force: false });
-    } catch (error) {
-        console.error("Erro Usuario.", error);
-    }
+export async function syncUsuario() {
+  try {
+    await Usuario.sync({ force: false });
+  } catch (error) {
+    console.error('Erro na sincronização de Usuario', error);
+  }
 }
 
-module.exports = usuario;
-
-/*module.exports =  {
-    usuario: usuario,
-    syncUsuario: syncUsuario
-}*/
+export default Usuario;
