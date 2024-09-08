@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
+import sequelize from './database.js';
 
 class DisciplinaCurso extends Model { }
 
@@ -38,7 +38,7 @@ export async function sincronizarDisciplinaCurso() {
   } catch (error) {
     console.error('Erro ao sincronizar a tabela: ', error);
   } finally {
-    await sequelize.close(); // Corrija a referência ao sequelize
+    await sequelize.close();
     console.log('Conexão fechada.');
   }
 }

@@ -3,7 +3,7 @@ import { Sequelize } from 'sequelize';
 const connection = new Sequelize("SUE", "root", "", {
   host: "localhost",
   dialect: "mysql",
-  port: 3306, // ou a porta do seu servidor MySQL
+  port: 3306,
 });
 
 export default connection;

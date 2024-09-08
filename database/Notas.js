@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database.js'; // Arquivo de configuração da conexão com o banco de dados
+import sequelize from './database.js';
 
 const Notas = sequelize.define('Notas', {
   id_notas: {
