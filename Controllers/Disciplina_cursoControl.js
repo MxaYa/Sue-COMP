@@ -35,55 +35,28 @@ exports.getAllDisciplinaCurso = async (req, res) => {
   }
 };
 
-
-/**
- * Carlos
- */
-const { DisciplinaCurso, Disciplina, Curso } = require('../models'); // Certifique-se de ajustar o caminho para o local correto dos seus modelos
-
 // READ - Obtém uma Disciplina pelo ID
-exports.getDisciplinaById = async (req, res) => {
+//Rota Abaixo em manutenção, ainda não sei como fazer
+/*exports.getDisciplinaById = async (req, res) => {
   try {
-    // Obtém os IDs dos parâmetros da requisição
-    const id_disciplina = req.params.id_disciplina;
-    const id_curso = req.params.id_curso;
-
-    // Verifica se os IDs foram fornecidos
-    if (!id_disciplina || !id_curso) {
-      return res.status(400).json({ message: "Parâmetros de ID não fornecidos." });
-    }
-
-    // Encontra a associação no banco de dados
-    const disciplinaCurso = await DisciplinaCurso.findOne({
-      where: {
-        disciplinaId: id_disciplina,
-        cursoId: id_curso
-      },
-      include: [
-        { model: Disciplina, as: 'Disciplina' },
-        { model: Curso, as: 'Curso' }
-      ]
+    const disciplinaCurso = await DisciplinaCurso.findByPk(id_disciplina, id_curso {
+        include: [
+            {model: Disciplina, as: 'Disciplina'},
+            {model: Curso, as: 'Curso'}
+        ]
     });
 
-    // Verifica se a associação foi encontrada
-    if (!disciplinaCurso) {
-      return res.status(404).json({ message: "Associação de curso e disciplina não encontrada." });
-    }
 
-    // Retorna a resposta com os dados
-    res.status(200).json({
-      message: "Associação de curso e disciplina obtida com sucesso!",
-      data: disciplinaCurso
-    });
 
+    res
+      .status(200)
+      .json({ message: "Associação de curso e disciplina obtida com sucesso!", data: disciplina });
   } catch (error) {
-    // Captura e retorna o erro
-    res.status(500).json({
-      message: "Erro ao obter Associação de curso e disciplina.",
-      error: error.message
-    });
+    res
+      .status(500)
+      .json({ message: "Erro ao obter Associação de curso e disciplina.", error: error.message });
   }
-};
+};*/
 
 
 
