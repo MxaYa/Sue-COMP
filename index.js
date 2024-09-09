@@ -154,7 +154,7 @@ app.get("/disciplinas", (req, res) => {
         } = req.body;
         const id = id_disciplina;
         //const id = req.params.id;
-        const disciplina = await Disciplina.findByPk(id);
+        const disciplina = await Disciplina.findByPk(id_disciplina);
         if (!disciplina) {
           return res.status(404).json({
             error: `Disciplina NÃO FOI encontrada - NA TABELA DE DISCIPLINAS - ID: ${id}.`,

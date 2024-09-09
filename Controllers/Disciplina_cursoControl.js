@@ -1,8 +1,13 @@
-const Disciplina = require("../database/DisciplinaCurso");
+
+/** Carlos
+ * Novas importacoes
+ */
+const express = require('express');
+const {Disciplina} = require("../database/Disciplina");
 const DisciplinaCurso = require("../database/DisciplinaCurso");
 const Curso = require("../database/Curso");
 const DisciplinaCursoVW = require("../database/DisciplinaCursoVW");
-const DisciplinaCurso = require("../database/DisciplinaCurso");
+
 
 // READ - Obtém todas as Disciplinas
 exports.getAllDisciplinaCurso = async (req, res) => {
@@ -53,30 +58,38 @@ exports.getAllDisciplinaCurso = async (req, res) => {
   }
 };*/
 
-// DELETE - Deleta uma Disciplina pelo ID
-exports.deleteDisciplina = async (req, res) => {
+
+/**
+ *Carlos
+ */
+exports.getDisciplinaById = async (req, res) => {
   try {
     const id_disciplina = req.params.id_disciplina;
     const id_curso = req.params.id_curso;
-    const rowsDeleted = await Disciplina.destroy({
+
+    const disciplinaCurso = await DisciplinaCurso.findOne({
       where: { id_disciplina: id_disciplina, id_curso: id_curso },
+      include: [
+        { model: Disciplina, as: 'Disciplina' },
+        { model: Curso, as: 'Curso' }
+      ]
     });
-    if (rowsDeleted === 0) {
+
+    if (!disciplinaCurso) {
       return res
         .status(404)
         .json({ message: "Associação de curso e disciplina não encontrada." });
     }
+
     res
       .status(200)
-      .json({
-        message: "Associação de curso e disciplina deletada com sucesso!",
-      });
+      .json({ message: "Associação de curso e disciplina obtida com sucesso!", data: disciplinaCurso });
   } catch (error) {
     res
       .status(500)
-      .json({
-        message: "Erro ao deletar Associação de curso e disciplina.",
-        error: error.message,
-      });
+      .json({ message: "Erro ao obter Associação de curso e disciplina.", error: error.message });
   }
 };
+
+
+
