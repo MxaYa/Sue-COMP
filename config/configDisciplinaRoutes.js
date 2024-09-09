@@ -1,3 +1,7 @@
+
+/**
+ * Rotas de disciplinaController
+ */
 const express = require('express');
 const app = express();
 const disciplinaRoutes = require('./routes/disciplinaRoutes');
