@@ -11,10 +11,10 @@ console.log("DB_NAME:", process.env.DB_NAME);
 console.log("DB_PORT:", process.env.DB_PORT);
 console.log("PORT:", process.env.PORT);*/
 
-const express = require("express"); 
+const express = require("express");
 
 const app = express();
-
+//
 app.set("view engine", "ejs");
 
 //const port = process.env.PORT || 1046;
@@ -32,7 +32,7 @@ const Ass_aluno_turma = require("./database/Ass_Aluno_turma");
 
 const Curso = require("./database/Curso");
 
-const Disciplina = require("./database/Disciplina"); 
+const Disciplina = require("./database/Disciplina");
 
 const DisciplinaCurso = require("./database/DisciplinaCurso");
 
@@ -63,10 +63,10 @@ const port = 1046;
 connection
   .authenticate()
   .then(() => {
-      console.log("Conexão feita!");
+    console.log("Conexão feita!");
   })
   .catch((msgErro) => {
-      console.log(msgErro);
+    console.log(msgErro);
   });
 
 app.get("/", (req, res) => {
@@ -78,126 +78,126 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.get("/disciplinas", (req, res) => {
-    Disciplina.findAll({
-      raw: true,
-      order: [
-        ["id_disciplina", "DESC"], // ASC = Crescente || DESC = Decrescente
-      ],
-    }).then((disciplinas) => {
-      res.render("cad_disciplinas", {
-        disciplinas: disciplinas,
-      });
+  Disciplina.findAll({
+    raw: true,
+    order: [
+      ["id_disciplina", "DESC"], // ASC = Crescente || DESC = Decrescente
+    ],
+  }).then((disciplinas) => {
+    res.render("cad_disciplinas", {
+      disciplinas: disciplinas,
     });
   });
-  
-  
+});
 
-  app.post("/editar_disciplina/:id_disciplina?", async (req, res) => {
-    const { nome_disciplina, valor_disciplina, descricao_disciplina, action } = req.body;
-    const { id_disciplina } = req.params; // Agora pega o id_disciplina do parâmetro de rota, se disponível
-  
-    console.log(
-      "**** Dados disciplina: => ESTOU EM /editar_disciplina",
+
+
+app.post("/editar_disciplina/:id_disciplina?", async (req, res) => {
+  const { nome_disciplina, valor_disciplina, descricao_disciplina, action } = req.body;
+  const { id_disciplina } = req.params; // Agora pega o id_disciplina do parâmetro de rota, se disponível
+
+  console.log(
+    "**** Dados disciplina: => ESTOU EM /editar_disciplina",
+    nome_disciplina,
+    valor_disciplina,
+    descricao_disciplina,
+    action,
+    id_disciplina
+  );
+
+  try {
+    if (action === "incluir") {
+      // Inserção de nova disciplina
+      await Disciplina.create({
+        nome_disciplina,
+        valor_disciplina,
+        descricao_disciplina,
+      });
+      res.status(201).redirect("/disciplinas");
+    } else if (action === "editar" && id_disciplina) {
+      // Edição de disciplina existente
+      await Disciplina.update(
+        {
+          nome_disciplina,
+          valor_disciplina,
+          descricao_disciplina,
+        },
+        { where: { id_disciplina } }
+      );
+      res.status(200).redirect("/disciplinas");
+    } else if (action === "excluir" && id_disciplina) {
+      // Exclusão de disciplina existente
+      await Disciplina.destroy({ where: { id_disciplina } });
+      res.status(200).redirect("/disciplinas");
+    } else {
+      res.status(400).json({ error: "Ação desconhecida ou ID inválido." });
+    }
+  } catch (error) {
+    console.error(
+      "Erro ao processar dados PARA A DISCIPLINA: /editar_disciplina",
+      error
+    );
+    res.status(500).json({
+      error: "Erro ao processar dados PARA A DISCIPLINA. /editar_disciplina",
+    });
+  }
+});
+
+
+if (action === "alterar") {
+  try {
+    const {
       nome_disciplina,
       valor_disciplina,
       descricao_disciplina,
-      action,
-      id_disciplina
+      id_disciplina,
+    } = req.body;
+    const id = id_disciplina;
+    //const id = req.params.id;
+    const disciplina = await Disciplina.findByPk(id);
+    if (!disciplina) {
+      return res.status(404).json({
+        error: `Disciplina NÃO FOI encontrada - NA TABELA DE DISCIPLINAS - ID: ${id}.`,
+      });
+    }
+    disciplina.nome_disciplina = nome_disciplina;
+    disciplina.valor_disciplina = valor_disciplina;
+    disciplina.descricao_disciplina = descricao_disciplina;
+    await disciplina.save();
+    res.status(201).redirect("/disciplinas");
+  } catch (error) {
+    console.error(
+      `Erro ao ALTERAR dados PARA A DISCIPLINA: /editardisciplina ${nome_disciplina}`,
+      error
     );
-  
-    try {
-      if (action === "incluir") {
-        // Inserção de nova disciplina
-        await Disciplina.create({
-          nome_disciplina,
-          valor_disciplina,
-          descricao_disciplina,
-        });
-        res.status(201).redirect("/disciplinas");
-      } else if (action === "editar" && id_disciplina) {
-        // Edição de disciplina existente
-        await Disciplina.update(
-          {
-            nome_disciplina,
-            valor_disciplina,
-            descricao_disciplina,
-          },
-          { where: { id_disciplina } }
-        );
-        res.status(200).redirect("/disciplinas");
-      } else if (action === "excluir" && id_disciplina) {
-        // Exclusão de disciplina existente
-        await Disciplina.destroy({ where: { id_disciplina } });
-        res.status(200).redirect("/disciplinas");
-      } else {
-        res.status(400).json({ error: "Ação desconhecida ou ID inválido." });
-      }
-    } catch (error) {
-      console.error(
-        "Erro ao processar dados PARA A DISCIPLINA: /editar_disciplina",
-        error
-      );
-      res.status(500).json({
-        error: "Erro ao processar dados PARA A DISCIPLINA. /editar_disciplina",
-      });
-    }
-  });
-  
+    res.status(500).json({
+      error: `Erro ao ALTERAR dados PARA A DISCIPLINA. /editardisciplina ${nome_disciplina}`,
+    });
+  }
+}
 
-    if (action === "alterar") {
-      try {
-        const {
-          nome_disciplina,
-          valor_disciplina,
-          descricao_disciplina,
-          id_disciplina,
-        } = req.body;
-        const id = id_disciplina;
-        //const id = req.params.id;
-        const disciplina = await Disciplina.findByPk(id);
-        if (!disciplina) {
-          return res.status(404).json({
-            error: `Disciplina NÃO FOI encontrada - NA TABELA DE DISCIPLINAS - ID: ${id}.`,
-          });
-        }
-        disciplina.nome_disciplina = nome_disciplina;
-        disciplina.valor_disciplina = valor_disciplina;
-        disciplina.descricao_disciplina = descricao_disciplina;
-        await disciplina.save();
-        res.status(201).redirect("/disciplinas");
-      } catch (error) {
-        console.error(
-          `Erro ao ALTERAR dados PARA A DISCIPLINA: /editardisciplina ${nome_disciplina}`,
-          error
-        );
-        res.status(500).json({
-          error: `Erro ao ALTERAR dados PARA A DISCIPLINA. /editardisciplina ${nome_disciplina}`,
-        });
-      }
-    }
-  
 
-  app.post("/excluir_disciplina/:id", async (req, res) => {
-    try {
-      const id = req.params.id;
-      const disciplina = await Disciplina.findByPk(id);
-      if (!disciplina) {
-        return res.status(404).json({ error: "Disciplina não encontrada." });
-      }
-
-      await Disciplina.destroy({
-        where: {
-          id_disciplina: id,
-        },
-      });
-      res.redirect("/disciplinas");
-    } catch (error) {
-      console.error("Erro ao excluir dados:", error);
-      res
-        .status(500)
-        .json({ error: "Erro ao excluir dados da tabela de disciplina." });
+app.post("/excluir_disciplina/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const disciplina = await Disciplina.findByPk(id);
+    if (!disciplina) {
+      return res.status(404).json({ error: "Disciplina não encontrada." });
     }
-  });
+
+    await Disciplina.destroy({
+      where: {
+        id_disciplina: id,
+      },
+    });
+    res.redirect("/disciplinas");
+  } catch (error) {
+    console.error("Erro ao excluir dados:", error);
+    res
+      .status(500)
+      .json({ error: "Erro ao excluir dados da tabela de disciplina." });
+  }
+});
 
 
 app.get("/disciplina_curso", async (req, res) => {
@@ -291,7 +291,7 @@ app.get("/coordenadores", (req, res) => {
 
 
 app.post("/criar_coordenador", async (req, res) => {
-  const { usuario, unidade} = req.body;
+  const { usuario, unidade } = req.body;
   try {
     await Coordenador.create({
       usuario,
@@ -306,7 +306,7 @@ app.post("/criar_coordenador", async (req, res) => {
 
 
 app.post("/editar_coordenador/:id", async (req, res) => {
-  const { usuario, unidade} = req.body;
+  const { usuario, unidade } = req.body;
   try {
     const coordenador = await Coordenador.findByPk(id);
     if (!coordenador) {
@@ -605,7 +605,7 @@ app.get("/professores", (req, res) => {
     order: [["id_professor", "DESC"]],
   })
     .then((professores) => {
-        res.render("cad_professores", { professores: professores });
+      res.render("cad_professores", { professores: professores });
 
     })
     .catch((err) => {
@@ -616,30 +616,30 @@ app.get("/professores", (req, res) => {
 
 
 app.post("/editar_professor", async (req, res) => {
-    const { nome, login_id, area_de_ensino, id_professor } = req.body;
-    console.log("Dados recebidos:", nome, login_id, area_de_ensino, id_professor);
-  
-    try {
-      if (id_professor) {
-        
-        const professor = await Professor.findByPk(id_professor);
-        if (professor) {
-          professor.nome = nome;
-          professor.login_id = login_id;
-          professor.area_de_ensino = area_de_ensino;
-          await professor.save();
-        }
-      } else {
-        
-        await Professor.create({ nome, login_id, area_de_ensino });
+  const { nome, login_id, area_de_ensino, id_professor } = req.body;
+  console.log("Dados recebidos:", nome, login_id, area_de_ensino, id_professor);
+
+  try {
+    if (id_professor) {
+
+      const professor = await Professor.findByPk(id_professor);
+      if (professor) {
+        professor.nome = nome;
+        professor.login_id = login_id;
+        professor.area_de_ensino = area_de_ensino;
+        await professor.save();
       }
-      res.redirect("/professores");
-    } catch (error) {
-      console.error("Erro ao editar/inserir professor:", error);
-      res.status(500).send("Erro interno ao editar/inserir professor");
+    } else {
+
+      await Professor.create({ nome, login_id, area_de_ensino });
     }
-  });
-  
+    res.redirect("/professores");
+  } catch (error) {
+    console.error("Erro ao editar/inserir professor:", error);
+    res.status(500).send("Erro interno ao editar/inserir professor");
+  }
+});
+
 
 app.post("/excluir_professor/:id", async (req, res) => {
   try {
@@ -669,7 +669,7 @@ app.get("/rep_financeiro", (req, res) => {
 
 app.post("/criar_financeiro", async (req, res) => {
   const { login_id, data_transacao, descricao } = req.body;
-  try { 
+  try {
     await Rep_financeiro.create({
       login_id,
       data_transacao,
@@ -717,190 +717,190 @@ app.post("/excluir_representante/:id_rep_financeiro", async (req, res) => {
     res.status(500).json({ error: "Erro ao excluir Representante Financeiro." });
   }
 });
-  //------------------------------------------------------------------------------
-  app.get("/status_aprovacao", (req, res) => {
-    Status_aprovacao.findAll({
-      raw: true,
-    }).then((statusAprov) => {
-      res.render("cad_statusAprovacao", {
-        statusAprov: statusAprov,
-      });
+//------------------------------------------------------------------------------
+app.get("/status_aprovacao", (req, res) => {
+  Status_aprovacao.findAll({
+    raw: true,
+  }).then((statusAprov) => {
+    res.render("cad_statusAprovacao", {
+      statusAprov: statusAprov,
     });
   });
+});
 
-  app.post("/criar_status", async (req, res) => {
-    const { status } = req.body;
-    try { 
-      await Status_aprovacao.create({
-        status,
-      
-      });
-      res.status(201).redirect("/status_aprovacao");
-    } catch (error) {
-      console.error("Erro ao criar o Status:", error);
-      res.status(500).json({ error: "Erro ao criar  Status." });
-    }
-  });
+app.post("/criar_status", async (req, res) => {
+  const { status } = req.body;
+  try {
+    await Status_aprovacao.create({
+      status,
 
-  app.post("/editar_status/:id_status", async (req, res) => {
-    const { status} = req.body;
-    const id_status = req.params.id_status;
-    try {
-      const status_aprovacao = await Professor.findByPk(id_status);
-      if (!status_aprovacao) {
-        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
-      }
-      status_aprovacao.status = status;
-      
-  
-      await professor.save();
-      res.status(201).redirect("/status_aprovacao");
-    } catch (error) {
-      console.error("Erro ao editar Status:", error);
-      res.status(500).json({ error: "Erro ao editar Status ." });
-    }
-  });
-
-  app.post("/excluir_status/:id_status", async (req, res) => {
-    const id_status = req.params.id_status;
-    try {
-      const status_aprovacao = await Status_aprovacao.findByPk(id_status);
-      if (!status_aprovacao) {
-        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
-      }
-      await status_aprovacao.destroy();
-      res.redirect("/status_aprovacao");
-    } catch (error) {
-      console.error("Erro ao excluir Status:", error);
-      res.status(500).json({ error: "Erro ao Statgus." });
-    }
-  });
-  //------------------------------------------------------------------------------
-  
-  app.get("/status_aprovacao", (req, res) => {
-    Status_aprovacao.findAll({
-      raw: true,
-    }).then((statusAprov) => {
-      res.render("cad_statusAprovacao", {
-        statusAprov: statusAprov,
-      });
     });
-  });
+    res.status(201).redirect("/status_aprovacao");
+  } catch (error) {
+    console.error("Erro ao criar o Status:", error);
+    res.status(500).json({ error: "Erro ao criar  Status." });
+  }
+});
 
-  app.post("/criar_status", async (req, res) => {
-    const { status } = req.body;
-    try { 
-      await Status_aprovacao.create({
-        status,
-      
-      });
-      res.status(201).redirect("/status_aprovacao");
-    } catch (error) {
-      console.error("Erro ao criar o Status:", error);
-      res.status(500).json({ error: "Erro ao criar  Status." });
+app.post("/editar_status/:id_status", async (req, res) => {
+  const { status } = req.body;
+  const id_status = req.params.id_status;
+  try {
+    const status_aprovacao = await Professor.findByPk(id_status);
+    if (!status_aprovacao) {
+      return res.status(404).json({ error: "Representante Financeiro não encontrado." });
     }
-  });
+    status_aprovacao.status = status;
 
-  app.post("/editar_status/:id_status", async (req, res) => {
-    const { status} = req.body;
-    const id_status = req.params.id_status;
-    try {
-      const status_aprovacao = await Professor.findByPk(id_status);
-      if (!status_aprovacao) {
-        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
-      }
-      status_aprovacao.status = status;
-      
-  
-      await professor.save();
-      res.status(201).redirect("/status_aprovacao");
-    } catch (error) {
-      console.error("Erro ao editar Status:", error);
-      res.status(500).json({ error: "Erro ao editar Status ." });
-    }
-  });
 
-  app.post("/excluir_status/:id_status", async (req, res) => {
-    const id_status = req.params.id_status;
-    try {
-      const status_aprovacao = await Status_aprovacao.findByPk(id_status);
-      if (!status_aprovacao) {
-        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
-      }
-      await status_aprovacao.destroy();
-      res.redirect("/status_aprovacao");
-    } catch (error) {
-      console.error("Erro ao excluir Status:", error);
-      res.status(500).json({ error: "Erro ao Statgus." });
+    await professor.save();
+    res.status(201).redirect("/status_aprovacao");
+  } catch (error) {
+    console.error("Erro ao editar Status:", error);
+    res.status(500).json({ error: "Erro ao editar Status ." });
+  }
+});
+
+app.post("/excluir_status/:id_status", async (req, res) => {
+  const id_status = req.params.id_status;
+  try {
+    const status_aprovacao = await Status_aprovacao.findByPk(id_status);
+    if (!status_aprovacao) {
+      return res.status(404).json({ error: "Representante Financeiro não encontrado." });
     }
-  });
+    await status_aprovacao.destroy();
+    res.redirect("/status_aprovacao");
+  } catch (error) {
+    console.error("Erro ao excluir Status:", error);
+    res.status(500).json({ error: "Erro ao Statgus." });
+  }
+});
 //------------------------------------------------------------------------------
 
-  app.get("/usuario", (req, res) => {
-    Usuario.findAll({
-      raw: true,
-    }).then((usuarios) => {
-      res.render("cad_usuario ", {
-        usuarios: usuarios,
-      });
+app.get("/status_aprovacao", (req, res) => {
+  Status_aprovacao.findAll({
+    raw: true,
+  }).then((statusAprov) => {
+    res.render("cad_statusAprovacao", {
+      statusAprov: statusAprov,
     });
   });
+});
 
-  app.post("/criar_usuario", async (req, res) => {
-    const { nome, telefone, email, cpf, endereco_id } = req.body;
-    try { 
-      await Usuario.create({
-        nome, 
-        telefone, 
-        email, 
-        cpf, 
-        endereco_id,
-      
-      });
-      res.status(201).redirect("/usuario");
-    } catch (error) {
-      console.error("Erro ao criar o Usuario:", error);
-      res.status(500).json({ error: "Erro ao criar  Status." });
-    }
-  });
+app.post("/criar_status", async (req, res) => {
+  const { status } = req.body;
+  try {
+    await Status_aprovacao.create({
+      status,
 
-  app.post("/editar_usuario/:id_usuario", async (req, res) => {
-    const { nome, telefone, email, cpf, endereco_id} = req.body;
-    const id_usuario = req.params.id_usuario;
-    try {
-      const usuario = await Usuario.findByPk(id_usuario);
-      if (!usuario) {
-        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
-      }
-      usuario.nome = nome;
-      usuario.telefone = telefone;
-      usuario.email = email;
-      usuario.cpf = cpf;
-      usuario.endereco_id = endereco_id;
-      
-  
-      await usuario.save();
-      res.status(201).redirect("/usuarios");
-    } catch (error) {
-      console.error("Erro ao editar usuarios:", error);
-      res.status(500).json({ error: "Erro ao editar usuarios ." });
-    }
-  });
+    });
+    res.status(201).redirect("/status_aprovacao");
+  } catch (error) {
+    console.error("Erro ao criar o Status:", error);
+    res.status(500).json({ error: "Erro ao criar  Status." });
+  }
+});
 
-  app.post("/excluir_usuarios/:id_usuario", async (req, res) => {
-    const id_usuario = req.params.id_usuario;
-    try {
-      const usuario = await Usuario.findByPk(id_usuario);
-      if (!usuario) {
-        return res.status(404).json({ error: "Representante Financeiro não encontrado." });
-      }
-      await usuario.destroy();
-      res.redirect("/usuarios");
-    } catch (error) {
-      console.error("Erro ao excluir usuarios:", error);
-      res.status(500).json({ error: "Erro ao usuarios." });
+app.post("/editar_status/:id_status", async (req, res) => {
+  const { status } = req.body;
+  const id_status = req.params.id_status;
+  try {
+    const status_aprovacao = await Professor.findByPk(id_status);
+    if (!status_aprovacao) {
+      return res.status(404).json({ error: "Representante Financeiro não encontrado." });
     }
+    status_aprovacao.status = status;
+
+
+    await professor.save();
+    res.status(201).redirect("/status_aprovacao");
+  } catch (error) {
+    console.error("Erro ao editar Status:", error);
+    res.status(500).json({ error: "Erro ao editar Status ." });
+  }
+});
+
+app.post("/excluir_status/:id_status", async (req, res) => {
+  const id_status = req.params.id_status;
+  try {
+    const status_aprovacao = await Status_aprovacao.findByPk(id_status);
+    if (!status_aprovacao) {
+      return res.status(404).json({ error: "Representante Financeiro não encontrado." });
+    }
+    await status_aprovacao.destroy();
+    res.redirect("/status_aprovacao");
+  } catch (error) {
+    console.error("Erro ao excluir Status:", error);
+    res.status(500).json({ error: "Erro ao Statgus." });
+  }
+});
+//------------------------------------------------------------------------------
+
+app.get("/usuario", (req, res) => {
+  Usuario.findAll({
+    raw: true,
+  }).then((usuarios) => {
+    res.render("cad_usuario ", {
+      usuarios: usuarios,
+    });
   });
+});
+
+app.post("/criar_usuario", async (req, res) => {
+  const { nome, telefone, email, cpf, endereco_id } = req.body;
+  try {
+    await Usuario.create({
+      nome,
+      telefone,
+      email,
+      cpf,
+      endereco_id,
+
+    });
+    res.status(201).redirect("/usuario");
+  } catch (error) {
+    console.error("Erro ao criar o Usuario:", error);
+    res.status(500).json({ error: "Erro ao criar  Status." });
+  }
+});
+
+app.post("/editar_usuario/:id_usuario", async (req, res) => {
+  const { nome, telefone, email, cpf, endereco_id } = req.body;
+  const id_usuario = req.params.id_usuario;
+  try {
+    const usuario = await Usuario.findByPk(id_usuario);
+    if (!usuario) {
+      return res.status(404).json({ error: "Representante Financeiro não encontrado." });
+    }
+    usuario.nome = nome;
+    usuario.telefone = telefone;
+    usuario.email = email;
+    usuario.cpf = cpf;
+    usuario.endereco_id = endereco_id;
+
+
+    await usuario.save();
+    res.status(201).redirect("/usuarios");
+  } catch (error) {
+    console.error("Erro ao editar usuarios:", error);
+    res.status(500).json({ error: "Erro ao editar usuarios ." });
+  }
+});
+
+app.post("/excluir_usuarios/:id_usuario", async (req, res) => {
+  const id_usuario = req.params.id_usuario;
+  try {
+    const usuario = await Usuario.findByPk(id_usuario);
+    if (!usuario) {
+      return res.status(404).json({ error: "Representante Financeiro não encontrado." });
+    }
+    await usuario.destroy();
+    res.redirect("/usuarios");
+  } catch (error) {
+    console.error("Erro ao excluir usuarios:", error);
+    res.status(500).json({ error: "Erro ao usuarios." });
+  }
+});
 
 //--------------------------------------------------------------------------------
 
@@ -924,8 +924,8 @@ app.get("/aluno_turma", async (req, res) => {
 
 
 app.post("/editar_aluno_turma", async (req, res) => {
-  try{
-    const { aluno, turma, action} = req.body;
+  try {
+    const { aluno, turma, action } = req.body;
 
     if (action === "incluir") {
       await Ass_aluno_turma.create({
@@ -936,15 +936,15 @@ app.post("/editar_aluno_turma", async (req, res) => {
     } else if (action === "alterar") {
       const id_aluno_turma = req.body.temporario;
       await Ass_aluno_turma.update(
-        { id_aluno: aluno,id_turma: turma},
-        {where: {id_aluno_turma}}
+        { id_aluno: aluno, id_turma: turma },
+        { where: { id_aluno_turma } }
       );
       res.redirect("/aluno_turma");
     } else {
       res.status(400).send("!!!!");
     }
   } catch (error) {
-    console.error("Erro na inserção ou editar associao turma aluno: ", error );
+    console.error("Erro na inserção ou editar associao turma aluno: ", error);
     res.status(500).send("error na inserção ou edição das associativa turma");
   }
 });
@@ -954,11 +954,11 @@ app.post("/excluir_aluno_turma/:id_aluno/:id_turma", async (req, res) => {
     const id_aluno = req.params.id_aluno;
     const id_turma = req.params.id_turma;
     await Ass_aluno_turma.destroy({
-      where: { id_aluno: id_aluno, id_turma: id_turma},
+      where: { id_aluno: id_aluno, id_turma: id_turma },
     });
     res.redirect("/aluno_turma");
   } catch (error) {
-    console.error("error na exclusão de aluno turma: ",error);
+    console.error("error na exclusão de aluno turma: ", error);
     res.status(500).send("Erro na exclusão de aluno turma: ");
   }
 });
@@ -1039,7 +1039,7 @@ app.listen(port, function (erro) {
     );
 
     console.log(`Example app listening on port ${port}`);
-  } 
+  }
 
   //as2d31as23d1a
 });
