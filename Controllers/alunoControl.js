@@ -84,5 +84,22 @@ router.delete('/:id_aluno', async (req, res) => {
         res.status(500).json({ message: "Erro ao deletar Aluno.", error: error.message });
     }
 });
+/* =======
+import Aluno from '../database/Aluno.js';
 
+const router = express.Router();
+
+router.get('/aluno', async (req, res) => {
+  try {
+    const aluno = await Aluno.findAll({
+      raw: true,
+    });
+    res.send(aluno)
+  } catch (error) {
+    console.error('Erro ao obter alunos:', error.message);
+    res.status(500).json({ message: 'Erro ao obter alunos.', error: error.message });
+  }
+>>>>>>> 516d6de2a049a0e6893bf28caae1670788afc2a0
+});
+ */
 export default router;

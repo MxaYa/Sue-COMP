@@ -34,7 +34,7 @@ const Usuario = sequelize.define('Usuario', {
   },
 }, {
   timestamps: true,
-  tableName: 'usuarios',
+  tableName: 'usuario',
 });
 
 export async function syncUsuario() {
