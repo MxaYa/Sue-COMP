@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from './database.js';
 
-class Aluno extends Model { }
+class Aluno extends Model {}
 
 Aluno.init(
   {
@@ -12,37 +12,37 @@ Aluno.init(
       autoIncrement: true,
     },
     nome: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING(255), // Definindo o comprimento máximo para STRING
       allowNull: false,
     },
     id_login: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Usuario',
+        model: 'Usuario',  // Certifique-se de que este é o nome correto da tabela
         key: 'id_usuario',
       },
     },
-    id_rep_financeiro: {
+    rep_financeiro_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Rep_financeiro',
+        model: 'Rep_financeiro',  // Certifique-se de que este é o nome correto da tabela
         key: 'id_rep_financeiro',
       },
     },
     ativo: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     pagamento_curso: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
   },
   {
     sequelize,
-    modelName: 'aluno',
+    modelName: 'Aluno',
     tableName: 'aluno',
     timestamps: true,
   }
@@ -50,9 +50,10 @@ Aluno.init(
 
 export async function syncAluno() {
   try {
-    await Aluno.sync({ force: false });
+    await Aluno.sync({ alter: true }); // Usar alter em vez de force para manter dados existentes
+    console.log('Tabela aluno sincronizada com sucesso.');
   } catch (error) {
-    console.error('Erro na sincronização de aluno', error);
+    console.error('Erro na sincronização da tabela aluno:', error);
   }
 }
 

@@ -1,4 +1,5 @@
 -- Tabelas base que não possuem dependências de chaves estrangeiras
+//banco : SUE
 CREATE TABLE `endereco` (
   `id_endereco` int(11) NOT NULL AUTO_INCREMENT,
   `rua_Endereco` varchar(255) NOT NULL,
